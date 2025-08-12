@@ -13,7 +13,7 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ onLogout }) => {
   const handleLogout = () => {
     if (onLogout) onLogout();
 
-    router.replace("/Screens/Login");
+    router.replace("/screens/auth/LoginScreen");
   };
 
   return (
