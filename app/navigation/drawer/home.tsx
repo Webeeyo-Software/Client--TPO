@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { View, Text, Animated, Dimensions } from 'react-native';
 import MenuCard from '../../../components/home/MenuCard';
 import { useRouter } from 'expo-router';
+import Divider from 'components/ui/Divider';
 
 const icons = {
   companies: require('../../../assets/images/companies.png'),
@@ -79,7 +80,7 @@ const HomeScreen = () => {
   }, [imageOpacity, imageTranslateY, textOpacity, textTranslateY]);
 
   return (
-    <View className="mt-24 flex-1 bg-transparent px-4 pt-12">
+    <View className=" flex-1 bg-white px-4 pt-12">
       <View className="flex-row items-center">
         <Animated.Image
           source={require('../../../assets/images/abhi.jpg')}
@@ -102,7 +103,6 @@ const HomeScreen = () => {
           </Text>
         </Animated.View>
       </View>
-
       <Animated.ScrollView
         className="mt-8"
         showsVerticalScrollIndicator={false}
