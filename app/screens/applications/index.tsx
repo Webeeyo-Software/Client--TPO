@@ -14,7 +14,7 @@ export default function ApplicationScreen() {
   return (
     <View className="flex-1 bg-white px-4 pt-12">
       <Header title='Applications' mode="normal"/>
-      <View className='flex-col gap-5 mt-10'>
+      <View className='flex-col gap-2 mt-10'>
       <ApplicationItem
         icon={drivesIcon}
         title="Drives"
