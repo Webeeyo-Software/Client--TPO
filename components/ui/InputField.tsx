@@ -13,7 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 type InputType = "text" | "password" | "textarea" | "date" | "email" | "number";
 
 interface InputFieldProps extends Omit<TextInputProps, "secureTextEntry" | "multiline"> {
-  label: string;
+  label?: string;
   placeholder?: string;
   type?: InputType;
   value: string;
@@ -62,7 +62,7 @@ const InputField: React.FC<InputFieldProps> = ({
         {required && <Text className="text-red-600"></Text>}
       </Text>
 
-      <View className="flex-row items-center border border-gray-300 rounded-md px-4 py-3">
+      <View className="flex-row items-center border border-gray-300 rounded-md px-4 py-3 ml-2 mr-2">
         <TextInput
           style={{ flex: 1 }}
           placeholder={placeholder}
