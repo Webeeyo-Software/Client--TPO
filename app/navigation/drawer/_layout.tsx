@@ -28,6 +28,11 @@ export default function DrawerLayout() {
         <View className="w-6 h-0.5 bg-black rounded" />
       </TouchableOpacity>
     ),
+    headerRight:() =>(
+    <TouchableOpacity className='mr-9'>
+    <Ionicons name="sunny" size={24} color={"#999"} />
+    </TouchableOpacity>
+    )
   })}
 >
       <Drawer.Screen name="home" options={{ title: 'Home' }} />
