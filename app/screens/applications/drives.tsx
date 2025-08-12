@@ -5,9 +5,10 @@ import { Pagination } from '../../../components/applications/Drives/Pagination';
 import Feather from '@expo/vector-icons/Feather';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Header from 'components/ui/Header';
+import { router, useRouter } from 'expo-router';
 export default function DrivesScreen() {
   const [page, setPage] = useState(1);
-
+  const router = useRouter();
   const companies = [
     {
       logo: require('../../../assets/images/micro.png'),
@@ -15,41 +16,42 @@ export default function DrivesScreen() {
       type: 'Placement',
     },
     {
-      logo: require('../../../assets/images/micro.png'),
+      logo: require('../../../assets/images/amazon.png'),
       name: 'Amazon.com, Inc.',
       type: 'Internship',
     },
     {
-      logo: require('../../../assets/images/micro.png'),
+      logo: require('../../../assets/images/Cisco.png'),
       name: 'Cisco Systems, Inc.',
       type: 'Industrial Training',
     },
     {
-      logo: require('../../../assets/images/micro.png'),
+      logo: require('../../../assets/images/google.png'),
       name: 'Google LLC',
       type: 'Internship + Placement',
     },
     {
-      logo: require('../../../assets/images/micro.png'),
+      logo: require('../../../assets/images/paypal.png'),
       name: 'PayPal Holdings, Inc.',
       type: 'Internship + Performance based PPO',
     },
     {
-      logo: require('../../../assets/images/micro.png'),
+      logo: require('../../../assets/images/amazon.png'),
       name: 'Amazon.com, Inc.',
       type: 'Internship',
     },
     {
-      logo: require('../../../assets/images/micro.png'),
+      logo: require('../../../assets/images/Cisco.png'),
       name: 'Cisco Systems, Inc.',
       type: 'Industrial Training',
     },
     {
-      logo: require('../../../assets/images/micro.png'),
+      logo: require('../../../assets/images/Cisco.png'),
       name: 'Cisco Systems, Inc.',
       type: 'Industrial Training',
-    },{
-      logo: require('../../../assets/images/micro.png'),
+    },
+    {
+      logo: require('../../../assets/images/Cisco.png'),
       name: 'Cisco Systems, Inc.',
       type: 'Industrial Training',
     },
@@ -57,35 +59,32 @@ export default function DrivesScreen() {
 
   return (
     <View className="flex-1 bg-white px-4 pt-12">
-     <Header title='Drives' mode='normal'/>
+      <Header title="Drives" mode="normal" />
 
-      <View className="mx-4 mb-4 flex-row items-center rounded-xl bg-gray-100 px-3 py-2 mt-">
+      <View className="mt- mx-4 mb-4 flex-row items-center rounded-xl bg-gray-100 px-3 py-2 gap-3">
         <Feather name="search" size={20} color="black" />
         <TextInput
           placeholder="Search companies for Drives"
-          className="flex-1 text-sm text-gray-700"
+          className="flex-1 text-m text-gray-700"
           placeholderTextColor="#9CA3AF"
         />
         <AntDesign name="filter" size={20} color="black" />
       </View>
 
-      {/* List */}
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 16 }}>
+        contentContainerStyle={{ paddingHorizontal: 16, marginTop: 13, gap: 3,paddingVertical:10 }}>
         {companies.map((company, idx) => (
           <CompanyCard
             key={idx}
             logo={company.logo}
             name={company.name}
             type={company.type}
-            onPress={() => console.log(`Pressed ${company.name}`)}
+            onPress={() => router.push('screens/applications/appliedCompanyOptions')}
           />
         ))}
-
-        {/* Pagination */}
-        <Pagination current={page} total={10} onPageChange={setPage} />
       </ScrollView>
+      <Pagination current={page} total={10} onPageChange={setPage} />
     </View>
   );
 }
