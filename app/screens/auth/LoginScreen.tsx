@@ -44,7 +44,7 @@ const router = useRouter();
         </TouchableOpacity>
       </View>
 
-      <PrimaryButton label="Login" onPress={() => {router.push('./OnboardingScr')}} />
+      <PrimaryButton label="Login" onPress={() => {router.push('')}} />
     </View>
   );
 };
