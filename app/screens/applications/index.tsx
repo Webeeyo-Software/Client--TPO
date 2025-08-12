@@ -5,7 +5,7 @@ import { useRouter } from 'expo-router';
 import { ChevronLeftIcon } from 'react-native-heroicons/outline';
 import ApplicationItem from '../../../components/applications/ApplicationItem';
 import Header from 'components/ui/Header';
-const drivesIcon = require('../../../assets/images/drives.png'); // Use your own images
+const drivesIcon = require('../../../assets/images/drives.png'); 
 const appliedCompaniesIcon = require('../../../assets/images/company.png');
 
 export default function ApplicationScreen() {

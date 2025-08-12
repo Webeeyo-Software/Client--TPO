@@ -5,7 +5,7 @@ import { useRouter } from 'expo-router';
 import { ChevronLeftIcon } from 'react-native-heroicons/outline';
 import ApplicationItem from '../../../components/applications/ApplicationItem';
 import Header from 'components/ui/Header';
-const detailsIcon = require('../../../assets/images/details.png'); // Use your own images
+const detailsIcon = require('../../../assets/images/details.png');
 const trackingIcon = require('../../../assets/images/tracking.png');
 
 export default function ApplicationScreen() {

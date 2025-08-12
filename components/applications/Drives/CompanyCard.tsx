@@ -12,11 +12,10 @@ type CompanyCardProps = {
 export const CompanyCard: React.FC<CompanyCardProps> = ({ logo, name, type, onPress }) => {
   return (
     <TouchableOpacity
-      className="flex-row items-center bg-white rounded-xl px-4 py-3 mb-3 shadow-md h-24"
+      className="flex-row justify-between items-center border border-gray-100 bg-white rounded-xl px-4 py-4 mb-4 shadow-md"
       activeOpacity={0.7}
       onPress={onPress}
     >
-      {/* Logo */}
       <View className="w-12 h-12 justify-center items-center mr-4">
         <Image
           source={logo}
@@ -25,13 +24,11 @@ export const CompanyCard: React.FC<CompanyCardProps> = ({ logo, name, type, onPr
         />
       </View>
 
-      {/* Text Content */}
       <View className="flex-1">
         <Text className="text-lg font-semibold text-gray-900">{name}</Text>
         <Text className="text-base text-gray-500 mt-0.5">{type}</Text>
       </View>
 
-      {/* Right Arrow */}
       <AntDesign name="right" size={18} color="#6B7280" />
     </TouchableOpacity>
   );
