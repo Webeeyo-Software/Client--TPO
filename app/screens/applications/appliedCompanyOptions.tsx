@@ -1,8 +1,5 @@
-// screens/ApplicationScreen.tsx
-import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
-import { ChevronLeftIcon } from 'react-native-heroicons/outline';
 import ApplicationItem from '../../../components/applications/ApplicationItem';
 import Header from 'components/ui/Header';
 const detailsIcon = require('../../../assets/images/details.png');
@@ -19,14 +16,14 @@ export default function ApplicationScreen() {
         icon={detailsIcon}
         title="Details"
         subtitle="Check filled details"
-        onPress={() => router.push('screens/applications/drives')}
+        onPress={() => router.push('screens/applications/details')}
       />
 
       <ApplicationItem
         icon={trackingIcon}
         title="Application status"
         subtitle="Check application status"
-        onPress={() => router.push('screens/applications/appliedCompanies')}
+        onPress={() => router.push('screens/applications/applicationStatus')}
       />
       </View>
     </View>
