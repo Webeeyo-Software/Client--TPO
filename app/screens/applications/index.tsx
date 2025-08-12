@@ -1,15 +1,34 @@
-import { View, Text } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+// screens/ApplicationScreen.tsx
+import React from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { useRouter } from 'expo-router';
+import { ChevronLeftIcon } from 'react-native-heroicons/outline';
+import ApplicationItem from '../../../components/applications/ApplicationItem';
 import Header from 'components/ui/Header';
-import '../../../global.css';
+const drivesIcon = require('../../../assets/images/drives.png'); // Use your own images
+const appliedCompaniesIcon = require('../../../assets/images/company.png');
 
-export default function Applications() {
+export default function ApplicationScreen() {
+  const router = useRouter();
+
   return (
-      <SafeAreaView>
-        <Header title='Applications' mode='normal'/>
-        <View className='items-center justify-center bg-[#1877F2] py-60 m-11 rounded-lg mt-60'>
-          <Text text-xl>Applications</Text>
-        </View>
-      </SafeAreaView>
+    <View className="flex-1 bg-white px-4 pt-12">
+      <Header title='Applications' mode="normal"/>
+      <View className='flex-col gap-5 mt-10'>
+      <ApplicationItem
+        icon={drivesIcon}
+        title="Drives"
+        subtitle="Explore Drives"
+        onPress={() => router.push('screens/applications/drives')}
+      />
+
+      <ApplicationItem
+        icon={appliedCompaniesIcon}
+        title="Applied Companies"
+        subtitle="View applied companies"
+        onPress={() => router.push('screens/applications/appliedCompanies')}
+      />
+      </View>
+    </View>
   );
 }
