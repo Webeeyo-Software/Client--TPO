@@ -12,13 +12,13 @@ export const Pagination: React.FC<PaginationProps> = ({ current, total, onPageCh
   const pages = [1, 2, "...", total - 1, total];
 
   return (
-    <View className="flex-row justify-center items-center mt-4 space-x-2">
+    <View className="flex-row justify-center items-center mt-4 space-x-2 gap-5 pb-11">
       {pages.map((p, index) => (
         <TouchableOpacity
           key={index}
           disabled={p === "..."}
           onPress={() => typeof p === "number" && onPageChange(p)}
-          className={`w-8 h-8 rounded-full justify-center items-center ${
+          className={`w-12 h-12 rounded-full justify-center items-center ${
             p === current ? "bg-blue-500" : "bg-gray-200"
           }`}
         >
