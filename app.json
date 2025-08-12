@@ -1,8 +1,9 @@
 {
   "expo": {
-    "name": "frontend",
-    "slug": "frontend",
+    "name": "Client--TPO",
+    "slug": "Client--TPO",
     "version": "1.0.0",
+    "scheme": "client-tpo",
 
     "web": {
       "favicon": "./assets/favicon.png"
