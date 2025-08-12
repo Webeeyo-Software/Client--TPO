@@ -29,9 +29,7 @@ const MenuCard: React.FC<MenuCardProps> = ({
       <TouchableOpacity
         onPress={onPress}
         activeOpacity={0.7}
-        className={`flex-row justify-between items-center bg-white rounded-xl px-4 py-4 mb-4 shadow ${
-          highlighted ? 'border border-blue-500' : ''
-        }`}
+        className={`flex-row justify-between items-center border border-gray-100 bg-white rounded-xl px-4 py-4 mb-4 shadow-md`}
       >
         <View className="flex-1 pr-4">
           <Text className="font-bold text-base text-black">{title}</Text>
@@ -74,9 +72,7 @@ const MenuCard: React.FC<MenuCardProps> = ({
         transform: [{ translateY }, { scaleX }],
         opacity,
       }}
-      className={`flex-row justify-between items-center bg-white rounded-xl px-4 py-4 mb-4 shadow ${
-        highlighted ? 'border border-blue-500' : ''
-      }`}
+      className={`flex-row justify-between items-center bg-white rounded-2xl px-4 py-4 mb-4 border border-gray-100`}
     >
       <View className="flex-1 pr-4">
         <Text className="font-bold text-x text-black">{title}</Text>
