@@ -1,65 +1,75 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import React from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Header from 'components/ui/Header';
-import AddButton from 'components/ui/addButton';
+import React, { useState } from 'react';
+import { ScrollView, View } from 'react-native';
+import Header from '../../../components/ui/Header';
+import DeleteModal from '../../../components/tpoRegistration/DeleteModal';
+import AddModal from '../../../components/tpoRegistration/AddModal';
+import FloatingAddButton from '../../../components/tpoRegistration/FloatingButton';
+import TpoCard from '../../../components/tpoRegistration/TpoCard';
 
-const detailData = [
+export default function HomeScreen() {
+  const [detailData, setDetailData] = useState([
     { title: 'Placement', year: '2024-25' },
     { title: 'Internship', year: '2024-25' },
     { title: 'Placement And Internship', year: '2024-25' },
     { title: 'Internship + PPO', year: '2024-25' },
     { title: 'Placement', year: '2024-25' },
-];
+  ]);
 
-const App = () => {
-    const router = useRouter();
-    return (
+  const [modalVisible, setModalVisible] = useState(false);
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
 
+  const handleAddData = (academicYear: string, placementType: string) => {
+    setDetailData((prev) => [...prev, { title: placementType, year: academicYear }]);
+    setModalVisible(false);
+  };
 
-        <View className=" flex-1 px-10 pt-12 bg-white py-20">
-            <Header title='Tpo Registration' mode='normal' />
-            <ScrollView style={{ marginTop: 10 }}>
-                {detailData.map((item, index) => (
+  const confirmDelete = (index: number) => {
+    setDeleteIndex(index);
+    setDeleteModalVisible(true);
+  };
 
-                    <View key={index} className=" border border-[#ccc] rounded-lg overflow-hidden mb-3">
+  const handleDelete = () => {
+    if (deleteIndex !== null) {
+      setDetailData((prev) => prev.filter((_, i) => i !== deleteIndex));
+    }
+    setDeleteModalVisible(false);
+    setDeleteIndex(null);
+  };
 
+  return (
+   
+      <View className="flex-1 px-4 pt-12 bg-white py-20">
+        <Header title="Tpo Registration" mode="normal" />
 
-                        <View className="bg-[#1877F2] p-3 flex flex-row justify-between items-center">
+        <ScrollView className="mt-5">
+          {detailData.map((item, index) => (
+            <TpoCard
+              key={index}
+              title={item.title}
+              year={item.year}
+              onDelete={() => confirmDelete(index)}
+            />
+          ))}
+        </ScrollView>
 
+        {/* Floating Add Button */}
+        <FloatingAddButton onPress={() => setModalVisible(true)} />
 
-                            <Text className="text-white font-semibold text-base"> {item.title}</Text>
+        {/* Add Modal */}
+        <AddModal
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+          onSave={handleAddData}
+        />
 
-
-                            <TouchableOpacity>
-                                <Ionicons name="trash-outline" size={20} color="white" />
-                            </TouchableOpacity>
-                        </View>
-
-
-
-                        <View className={"bg-white p-3 flex flex-row justify-between"}>
-
-
-                            <Text className={"font-[600]"}>Academic Year</Text>
-
-
-                            <Text className={"text-black"}>{item.year}</Text>
-
-                        </View>
-                    </View>
-                ))}
-            </ScrollView>
-
-            <AddButton />
-
-
-
-        </View>
-
-    );
-};
-
-export default App;
-
+        {/* Delete Modal */}
+        <DeleteModal
+          visible={deleteModalVisible}
+          onCancel={() => setDeleteModalVisible(false)}
+          onDelete={handleDelete}
+        />
+      </View>
+    
+  );
+}
