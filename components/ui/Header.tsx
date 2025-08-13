@@ -7,15 +7,11 @@ type HeaderProps = {
   mode?: 'normal' | 'close'; 
 };
 
-export default function Header({ title, mode = 'normal' }: HeaderProps) {
+export default function Header({ title, mode = 'normal' }: HeaderProps){
   const router = useRouter();
 
-  return (
-<<<<<<< HEAD
-    <View className="h-14 flex-row items-center bg-transparent">
-=======
+  return(
     <View className="h-14 flex-row items-center bg-transparent mt-8">
->>>>>>> OffCampus_YS
       <TouchableOpacity
         onPress={() => router.back()}
         activeOpacity={0.6}
