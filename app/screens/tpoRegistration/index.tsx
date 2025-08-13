@@ -42,7 +42,8 @@ export default function HomeScreen() {
       <View className="flex-1 px-4 pt-12 bg-white">
         <Header title="Tpo Registration" mode="normal" />
 
-        <ScrollView className="mt-5 pb-11">
+        <ScrollView className="mt-5 pb-11" showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}>
           {detailData.map((item, index) => (
             <TpoCard
               key={index}
