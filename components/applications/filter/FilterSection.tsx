@@ -8,7 +8,7 @@ type FilterSectionProps = {
 
 export default function FilterSection({ title, children }: FilterSectionProps) {
   return (
-    <View className="mb-6 mt-5">
+    <View className="mb-6 mt-2">
       <Text className="text-blue-600 font-semibold mb-3 text-lg">{title}</Text>
       {children}
     </View>
