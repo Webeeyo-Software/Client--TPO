@@ -6,34 +6,37 @@ import InputField from '../../../components/ui/InputField';
 import CheckboxWithLabel from '../../../components/auth/Login/CheckboxWithLabel';
 import PrimaryButton from '../../../components/ui/PrimaryButton';
 import { useRouter } from 'expo-router';
-
+import Feather from '@expo/vector-icons/Feather';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 const LoginScreen = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(true);
-const router = useRouter();
+  const router = useRouter();
   return (
-    <View className="flex-1 gap-3 bg-white px-6 pt-14">
+    <View className="flex-1 bg-white px-4 pt-12">
       <Title />
-      <View>
+      <View className="mx-5">
         <InputField
           label="Username"
           placeholder="Enter your name"
           value={username}
           onChangeText={setUsername}
           required
+          frontIcon={<Feather name="user" size={24} color="#999" />}
+        />
+        <InputField
+          label="Password"
+          placeholder="Enter your password"
+          type="password"
+          value={password}
+          onChangeText={setPassword}
+          required
+          frontIcon={<MaterialIcons name="password" size={24} color="#999" />}
         />
       </View>
-      <InputField
-        label="Password"
-        placeholder="Enter your password"
-        type="password"
-        value={password}
-        onChangeText={setPassword}
-        required
-      />
 
-      <View className="mb-6 mt-1 flex-row items-center justify-between">
+      <View className="mb-6 mt-1 flex-row items-center justify-between mx-6">
         <CheckboxWithLabel
           checked={rememberMe}
           onToggle={() => setRememberMe(!rememberMe)}
@@ -44,7 +47,12 @@ const router = useRouter();
         </TouchableOpacity>
       </View>
 
-      <PrimaryButton label="Login" onPress={() => {router.push('navigation/drawer')}} />
+      <PrimaryButton
+        label="Login"
+        onPress={() => {
+          router.push('navigation/drawer');
+        }}
+      />
     </View>
   );
 };
