@@ -1,17 +1,47 @@
-import React from "react";
-import { Text, View } from "react-native";
+import React, { useEffect, useRef } from "react";
+import { Text, View, Animated, Easing } from "react-native";
 
-interface TitleProps {}
+const Title: React.FC = () => {
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const translateY = useRef(new Animated.Value(20)).current; 
 
-const Title: React.FC<TitleProps> = () => {
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 800,
+      useNativeDriver: true,
+      easing: Easing.out(Easing.ease),
+    }).start();
+
+    Animated.timing(translateY, {
+      toValue: 0,
+      duration: 800,
+      useNativeDriver: true,
+      easing: Easing.out(Easing.ease),
+    }).start();
+  }, [fadeAnim, translateY]);
+
   return (
     <View className="my-6 mx-5">
-      <Text className="text-6xl font-bold text-black leading-tight">
-        Empower{'\n'}Your Skills
-      </Text>
-      <Text className="text-6xl font-bold text-[#1877F2] leading-tight">
-        Explore Top{'\n'}Placements
-      </Text>
+      <Animated.Text
+        style={{
+          opacity: fadeAnim,
+          transform: [{ translateY }],
+        }}
+        className="text-6xl font-bold text-black leading-tight"
+      >
+        Empower{"\n"}Your Skills
+      </Animated.Text>
+
+      <Animated.Text
+        style={{
+          opacity: fadeAnim,
+          transform: [{ translateY }],
+        }}
+        className="text-6xl font-bold text-[#1877F2] leading-tight"
+      >
+        Explore Top{"\n"}Placements
+      </Animated.Text>
     </View>
   );
 };
