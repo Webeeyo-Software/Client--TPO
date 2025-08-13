@@ -60,7 +60,7 @@ export default function DrivesScreen() {
           className="flex-1 text-m text-gray-700"
           placeholderTextColor="#9CA3AF"
         />
-        <AntDesign name="filter" size={20} color="black" />
+        <AntDesign name="filter" size={20} color="black" onPress={()=>{router.push('screens/applications/FilterScreen')}}/>
       </Animated.View>
 
       <Animated.FlatList
