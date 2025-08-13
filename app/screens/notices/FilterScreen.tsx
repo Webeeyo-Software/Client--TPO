@@ -6,7 +6,7 @@ import FilterSection from '../../../components/applications/filter/FilterSection
 import SelectableButton from '../../../components/applications/filter/SelectableButton';
 import RangeInput from '../../../components/applications/filter/RangeInput';
 import PrimaryButton from '../../../components/ui/PrimaryButton';
-import DateRangePicker from './DateRangePicker';
+import DateRangePicker from '../../../components/notices/DateRangePicker';
 const placementTypes = [
   'Placement',
   'Internship',
