@@ -27,19 +27,18 @@ const AddModal: React.FC<AddModalProps> = ({ visible, onClose, onSave }) => {
   };
 
   return (
-    <Modal isVisible={visible} backdropColor="#fff" backdropOpacity={0.7}>
-      <View className="bg-white rounded-lg p-5 border border-gray-400">
+    <Modal isVisible={visible} backdropColor="#000" backdropOpacity={0.5}>
+      <View className="ml-5 h-auto w-96 rounded-lg border border-gray-400 bg-gray-200 p-5">
         <Text className="text-lg font-bold mb-5 text-center">
           Add Tpo Registration
         </Text>
 
-        {/* Academic Year */}
-        <Text className="text-sm font-semibold mb-1.5">Academic year</Text>
+        <Text className="text-base font-semibold mb-1.5">Academic year</Text>
         <TouchableOpacity
           className="border border-gray-300 rounded-md p-3 mb-2"
           onPress={() => setAcademicYearDropdown(!academicYearDropdown)}
         >
-          <Text className="text-sm text-gray-500">
+          <Text className="text-base text-gray-500">
             {academicYear || 'Choose Academic year'}
           </Text>
         </TouchableOpacity>
@@ -60,7 +59,6 @@ const AddModal: React.FC<AddModalProps> = ({ visible, onClose, onSave }) => {
           </View>
         )}
 
-        {/* Placement Type */}
         <Text className="text-sm font-semibold mb-1.5">Placement type</Text>
         <TouchableOpacity
           className="border border-gray-300 rounded-md p-3 mb-2"
@@ -87,7 +85,6 @@ const AddModal: React.FC<AddModalProps> = ({ visible, onClose, onSave }) => {
           </View>
         )}
 
-        {/* Buttons */}
         <View className="flex flex-row justify-between mt-2">
           <TouchableOpacity
             className="flex-1 bg-[#1E6DFF] py-3 rounded-md items-center mr-2"
@@ -96,7 +93,7 @@ const AddModal: React.FC<AddModalProps> = ({ visible, onClose, onSave }) => {
             <Text className="text-white font-semibold">Save</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            className="flex-1 bg-gray-200 py-3 rounded-md items-center ml-2"
+            className="flex-1 bg-gray-300 py-3 rounded-md items-center ml-2"
             onPress={onClose}
           >
             <Text className="text-black font-semibold">Cancel</Text>
