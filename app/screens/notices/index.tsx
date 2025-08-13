@@ -84,7 +84,7 @@ export default function NoticesScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ padding: 16, gap: 12 }}
         renderItem={({ item, index }) => (
-          <NoticeCard title={item.title} description={item.description} logo={item.logo} />
+          <NoticeCard title={item.title} description={item.description} logo={item.logo} onPress={() => router.push(`screens/notices/NoticeDetailScreen`)}/>
         )}
       />
     </SafeAreaView>
