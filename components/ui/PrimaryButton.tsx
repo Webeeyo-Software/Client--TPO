@@ -9,7 +9,7 @@ interface Props {
 const PrimaryButton: React.FC<Props> = ({ label, onPress }) => {
   return (
     <TouchableOpacity
-      className="bg-blue-500 rounded-lg p-2 items-center justify-center w-60 mb-4 ml-24 mt-6 shadow-2xl"
+      className="bg-blue-500 rounded-lg px-3 py-3 items-center justify-center mb-4 mt-6 mx-4 shadow-2xl w-auto"
       onPress={onPress}
     >
       <Text className="text-white text-center font-semibold text-base">
