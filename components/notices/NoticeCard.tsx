@@ -1,22 +1,22 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Svg, Path } from 'react-native-svg';
 
 type Props = {
   title: string;
   description: string;
   logo?: any;
+  onPress?: () => void;
 };
 
-export default function NoticeCard({ title, description, logo }: Props) {
+export default function NoticeCard({ title, description, logo, onPress }: Props) {
   return (
-    <TouchableOpacity className="h-40 flex-row items-center justify-between rounded-xl border border-gray-200 bg-gray-50 p-4">
+    <TouchableOpacity
+      onPress={onPress}
+      className="h-40 flex-row items-center justify-between rounded-xl border border-gray-200 bg-gray-50 p-4"
+    >
       <View className="flex-1 pr-3">
-        <View className='flex-row'>
         <Text className="text-l font-semibold text-gray-900 w-44">{title}</Text>
-        
-        </View>
         <Text className="mt-3 w-48 text-sm text-gray-500">{description}</Text>
       </View>
 
