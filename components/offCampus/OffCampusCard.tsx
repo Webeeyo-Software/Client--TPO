@@ -16,7 +16,7 @@ const OffcampusCard: React.FC<OffcampusCardProps> = ({
   description,
 }) => {
   return (
-    <View className="bg-white border border-gray-200 rounded-lg p-6 mb-4 mt-8 shadow-2xl h-80">
+    <View className="bg-white border border-gray-200 rounded-lg p-6 mb-6 mt-8 shadow-2xl h-80 mx-6">
 
       <Text className="font-bold text-2xl text-center mb-3">
         {company_name}
