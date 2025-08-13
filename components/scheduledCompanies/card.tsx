@@ -1,9 +1,9 @@
-import React from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
-import { FileText, Clock } from "lucide-react-native";
+import React from 'react';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { FileText, Clock, Building2 } from 'lucide-react-native';
 
 interface JobCardProps {
-  logo: any;
+  logo?: any;
   company: string;
   type: string;
   mode: string;
@@ -12,52 +12,49 @@ interface JobCardProps {
   onMore: () => void;
 }
 
-const JobCard: React.FC<JobCardProps> = ({
-  logo,
-  company,
-  type,
-  mode,
-  date,
-  onApply,
-  onMore,
-}) => {
+const JobCard: React.FC<JobCardProps> = ({ logo, company, type, mode, date, onApply, onMore }) => {
   return (
-    <View className="bg-white rounded-xl p-4 shadow flex-row items-start gap-4 mb-4">
-      {/* Logo */}
-      <Image source={logo} className="w-20 h-20 mr-4" resizeMode="contain" />
+    <View className="h-30 flex-row items-center justify-between rounded-xl border border-gray-200 bg-gray-50 p-4 mb-5">
+      <View className="mr-4 flex h-20 w-20  items-center justify-center overflow-hidden rounded-xl">
+        {logo ? (
+          <Image source={logo} className="h-20 w-20" resizeMode="contain" />
+        ) : (
+          <Building2 size={32} color="#9ca3af" />
+        )}
+      </View>
 
-      {/* Details */}
-      <View className="flex-1">
-        <Text className="text-lg font-bold">{company}</Text>
-        <Text className="text-gray-500">{type}</Text>
-
-        {/* Mode */}
-        <View className="flex-row items-center mt-1">
-          <FileText size={16} color="#9ca3af" className="mr-2" />
-          <Text className="text-gray-500 text-sm">{mode}</Text>
+      <View className="flex-1 justify-between">
+        <View>
+          <Text className="text-base font-semibold text-gray-900" numberOfLines={1}>
+            {company}
+          </Text>
+          <Text className="mt-0.5 text-xs text-gray-500" numberOfLines={1}>
+            {type}
+          </Text>
         </View>
 
-        {/* Date */}
-        <View className="flex-row items-center mt-1">
-          <Clock size={16} color="#9ca3af" className="mr-2" />
-          <Text className="text-gray-500 text-sm">{date}</Text>
+        <View className="mt-2 flex-row flex-wrap gap-y-1">
+          <View className="mr-4 flex-row items-center">
+            <FileText size={16} color="#6b7280" />
+            <Text className="ml-1 text-xs text-gray-600">{mode}</Text>
+          </View>
+          <View className="flex-row items-center">
+            <Clock size={16} color="#6b7280" />
+            <Text className="ml-1 text-xs text-gray-600">{date}</Text>
+          </View>
         </View>
 
-        {/* Buttons */}
-        <View className="flex-row mt-3 space-x-3 gap-2">
+        <View className="mt-3 flex-row gap-2">
           <TouchableOpacity
-            className="bg-blue-500 px-4 py-2 rounded-lg"
-            onPress={onApply}
-          >
-            <Text className="text-white font-semibold">Apply</Text>
+            className="flex-1 rounded-lg bg-blue-500 py-2 active:bg-blue-600"
+            onPress={onApply}>
+            <Text className="text-center font-medium text-white">Apply</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            className="bg-gray-300 px-4 py-2 rounded-lg"
-            onPress={onMore}
-          >
-            <Text className="text-gray-700 font-semibold">more</Text>
+            className="flex-1 rounded-lg bg-gray-200 py-2 active:bg-gray-300"
+            onPress={onMore}>
+            <Text className="text-center font-medium text-gray-700">More</Text>
           </TouchableOpacity>
-
         </View>
       </View>
     </View>

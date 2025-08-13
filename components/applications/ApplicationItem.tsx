@@ -19,7 +19,7 @@ export default function ApplicationItem({
     <TouchableOpacity
       activeOpacity={0.7}
       onPress={onPress}
-      className={`flex-row justify-between items-center border border-gray-100 bg-white rounded-xl px-4 py-4 mb-4 shadow-md`}>
+      className={`h-30 flex-row items-center justify-between rounded-xl border border-gray-200 bg-gray-50 p-4 mb-5`}>
       <View className="flex-row items-center space-x-4 gap-6">
         <Image source={icon} className="h-14 w-14" resizeMode="contain" />
         <View>
