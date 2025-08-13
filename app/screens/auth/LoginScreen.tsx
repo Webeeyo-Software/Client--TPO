@@ -42,7 +42,7 @@ const LoginScreen = () => {
           onToggle={() => setRememberMe(!rememberMe)}
           label="Remember me"
         />
-        <TouchableOpacity activeOpacity={0.7}>
+        <TouchableOpacity activeOpacity={0.7} onPress={()=>{router.push('screens/auth/ForgotPasswordScreen')}}>
           <Text className="text-sm font-medium text-[#1877F2]">Forgot the password ?</Text>
         </TouchableOpacity>
       </View>
