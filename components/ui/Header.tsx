@@ -11,7 +11,7 @@ export default function Header({ title, mode = 'normal' }: HeaderProps){
   const router = useRouter();
 
   return(
-    <View className="h-14 flex-row items-center bg-transparent mt-8">
+    <View className="h-14 flex-row items-center bg-transparent mt-4">
       <TouchableOpacity
         onPress={() => router.back()}
         activeOpacity={0.6}
@@ -25,7 +25,7 @@ export default function Header({ title, mode = 'normal' }: HeaderProps){
           color="black"
         />
       </TouchableOpacity>
-      <Text className="ml-2 text-2xl font-semibold text-gray-900">{title}</Text>
+      <Text className="ml-2 text-xl font-semibold text-gray-900">{title}</Text>
     </View>
   );
 }

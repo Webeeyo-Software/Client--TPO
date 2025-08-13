@@ -27,10 +27,6 @@
     "react-native-reanimated": "~3.17.4",
     "react-native-safe-area-context": "5.4.0",
     "react-native-svg": "15.11.2",
-<<<<<<< HEAD
-=======
-    "react-dom": "19.0.0",
->>>>>>> OffCampus_YS
     "react-native-web": "^0.20.0"
   },
   "devDependencies": {

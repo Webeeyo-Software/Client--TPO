@@ -46,7 +46,7 @@ export default function App() {
           onChangeText={setSkill}
           frontIcon={
             <Image
-              source={require('../../../assets/images/location-pin.png')}
+              source={require('../../../assets/images/skill.png')}
               className="h-5 w-5"
             />
           }
@@ -57,7 +57,7 @@ export default function App() {
           value={City}
           onChangeText={setCity}
           frontIcon={
-            <Image source={require('../../../assets/images/skill.png')} className="h-5 w-5" />
+            <Image source={require('../../../assets/images/location-pin.png')} className="h-5 w-5" />
           }
           required
         />
