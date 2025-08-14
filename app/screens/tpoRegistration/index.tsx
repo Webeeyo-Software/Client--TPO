@@ -39,10 +39,10 @@ export default function HomeScreen() {
 
   return (
    
-      <View className="flex-1 px-4 pt-12 bg-white py-20">
+      <View className="flex-1 px-4 pt-12 bg-white">
         <Header title="Tpo Registration" mode="normal" />
 
-        <ScrollView className="mt-5">
+        <ScrollView className="mt-5 pb-11">
           {detailData.map((item, index) => (
             <TpoCard
               key={index}
@@ -63,7 +63,6 @@ export default function HomeScreen() {
           onSave={handleAddData}
         />
 
-        {/* Delete Modal */}
         <DeleteModal
           visible={deleteModalVisible}
           onCancel={() => setDeleteModalVisible(false)}
