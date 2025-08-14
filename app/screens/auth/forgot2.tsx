@@ -28,9 +28,9 @@ const forgot2 = () => {
         />
         </View>
       </View>
-        <View className='mt-96'>
-      <PrimaryButton label="Submit" onPress={()=>{router.push('screens/auth/otp')}} />
-      </View>
+      <View className="mt-96 pt-36">
+        <PrimaryButton label="Submit" onPress={()=>{router.push('screens/auth/otp')}} />
+        </View>
     </View>
   );
 };

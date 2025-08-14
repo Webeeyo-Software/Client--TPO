@@ -33,7 +33,7 @@ const ForgotPasswordScreen = () => {
           />
         </View>
 
-        <View className="mt-96">
+      <View className="mt-96 pt-20">
           <PrimaryButton label="Submit" onPress={() => {router.push('screens/auth/forgot2')}} />
         </View>
       </View>
