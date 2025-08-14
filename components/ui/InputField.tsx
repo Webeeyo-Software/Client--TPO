@@ -64,7 +64,7 @@ const InputField: React.FC<InputFieldProps> = ({
   const toggleShowPassword = () => setShowPassword((prev) => !prev);
 
   return (
-    <View className="mb-4">
+    <View className="mb-4 mt-6">
       {/* Render label only if provided */}
       {label ? (
         <Text className="text-m text-gray-700 mb-1 font-semibold">
@@ -90,7 +90,7 @@ const InputField: React.FC<InputFieldProps> = ({
           placeholderTextColor="#9ca3af"
           {...rest}
           accessibilityLabel={label ? label + (required ? " required" : "") : placeholder}
-          className="text-base text-gray-900 p-0 m-0"
+          className="text-base text-gray-900"
         />
 
         {/* Password eye toggle */}

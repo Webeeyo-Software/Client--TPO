@@ -4,14 +4,15 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 
 type HeaderProps = {
   title: string;
+  className?: string;
   mode?: 'normal' | 'close'; 
 };
 
-export default function Header({ title, mode = 'normal' }: HeaderProps){
+export default function Header({ title, mode = 'normal', className }: HeaderProps){
   const router = useRouter();
 
   return(
-    <View className="h-14 flex-row items-center bg-transparent mt-4">
+    <View className={`h-14 flex-row items-center bg-transparent mt-12 ${className}`}>
       <TouchableOpacity
         onPress={() => router.back()}
         activeOpacity={0.6}
