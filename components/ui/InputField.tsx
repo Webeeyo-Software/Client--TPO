@@ -10,7 +10,7 @@ import {
 
 import { Ionicons } from '@expo/vector-icons';
 
-type InputType = "text" | "password" | "textarea" | "date" | "email" | "number";
+type InputType = "text" | "password" | "textarea" | "date" | "email" | "number" ;
 
 interface InputFieldProps extends Omit<TextInputProps, "secureTextEntry" | "multiline"> {
   label: string;
@@ -20,6 +20,7 @@ interface InputFieldProps extends Omit<TextInputProps, "secureTextEntry" | "mult
   onChangeText: (text: string) => void;
   required?: boolean;
   maxLength?: number;
+  showDropdown?: boolean;
   renderIcon?: (showPassword: boolean, toggle: () => void) => React.ReactNode;
 }
 
@@ -34,6 +35,7 @@ const InputField: React.FC<InputFieldProps> = ({
   renderIcon,
   keyboardType,
   ...rest
+  
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -104,13 +106,13 @@ const InputField: React.FC<InputFieldProps> = ({
 };
 
 export default InputField;
-// <InputField
-//         label="Name"
-//         placeholder="Enter your name"
-//         value={name}
-//         onChangeText={setName}
-//         required
-//       />
+{/* <InputField
+        label="Name"
+        placeholder="Enter your name"
+        value={name}
+        onChangeText={setName}
+        required
+      /> */}
 
 //       {/* Password input with show/hide */}
 //       <InputField

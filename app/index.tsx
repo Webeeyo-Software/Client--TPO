@@ -1,3 +1,4 @@
+import React from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
@@ -19,7 +20,6 @@ const SplashScreen = () => {
         router.replace("/navigation/drawer");
       }
     };
-
     checkLoginStatus();
   }, []);
 
