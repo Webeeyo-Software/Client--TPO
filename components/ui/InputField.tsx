@@ -73,7 +73,7 @@ const InputField: React.FC<InputFieldProps> = ({
         </Text>
       ) : null}
 
-      <View className="flex-row items-center border border-gray-300 rounded-md px-3 py-3">
+      <View className="flex-row items-center border border-gray-300 rounded-md px-3 py-0">
         {/* Front icon if passed */}
         {frontIcon ? <View className="mr-3">{frontIcon}</View> : null}
 

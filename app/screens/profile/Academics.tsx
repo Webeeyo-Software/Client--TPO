@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, ScrollView, TouchableOpacity, Switch, ProgressBarAndroidComponent } from "react-native";
+import { View, Text, TextInput, ScrollView, Switch, } from "react-native";
 import CheckBox from "expo-checkbox";
 import Header from "components/ui/Header";
 import InputRow from "components/profile/inputRow";
