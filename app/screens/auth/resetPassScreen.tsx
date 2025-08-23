@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { View, Alert } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import Header from "components/ui/Header";
@@ -21,7 +21,7 @@ const ResetPasswordScreen: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`${API_BASE_URL}/resetpassword`, {
+      const response = await fetch(`${API_BASE_URL}/auth/reset-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, newPassword }),
@@ -35,7 +35,7 @@ const ResetPasswordScreen: React.FC = () => {
       }
 
       Alert.alert("Success", "Password reset successful!");
-      router.push("/screens/auth/verifyComplete");
+      router.replace("/screens/auth/LoginScreen");
     } catch (err) {
       Alert.alert(`Error`, `Network error ${err}`,);
     }

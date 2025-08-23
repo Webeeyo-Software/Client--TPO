@@ -28,7 +28,7 @@ const ForgotPasswordScreen = () => {
 
     try {
       setLoading(true);
-      const res = await fetch(`${API_BASE_URL}/auth/sendOtp`, {
+      const res = await fetch(`${API_BASE_URL}/auth/verification`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
