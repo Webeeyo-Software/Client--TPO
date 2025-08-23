@@ -4,6 +4,7 @@ import { Text, TouchableOpacity } from "react-native";
 interface Props {
   label: string;
   onPress: () => void;
+  
 }
 
 const PrimaryButton: React.FC<Props> = ({ label, onPress }) => {

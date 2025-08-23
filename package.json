@@ -18,6 +18,7 @@
     "expo": "^53.0.20",
     "expo-router": "^5.1.4",
     "expo-status-bar": "~2.2.3",
+    "jwt-decode": "^4.0.0",
     "lucide-react-native": "^0.539.0",
     "nativewind": "latest",
     "react": "^19.0.0",

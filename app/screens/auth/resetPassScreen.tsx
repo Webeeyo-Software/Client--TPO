@@ -4,8 +4,7 @@ import Header from "components/ui/Header";
 import InputField from "components/ui/InputField";
 import PrimaryButton from "components/ui/PrimaryButton";
 import { useRouter } from "expo-router";
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-
+import Title from "components/auth/Login/Title";
 const ResetPasswordScreen: React.FC = () => {
   const router = useRouter();
   const [newPassword, setNewPassword] = useState("");
@@ -19,9 +18,9 @@ const ResetPasswordScreen: React.FC = () => {
 
   return (
     <View className="flex-1 bg-white px-4 pt-12">
-      <Header title="Reset Password" />
-
+      <Title title1="Reset" title2="Password"/>
       <View className="mx-5 mt-5">
+        
         <InputField
           label="New Password"
           placeholder="Enter your password"
