@@ -1,7 +1,7 @@
-import { TouchableOpacity, Text, View, Alert } from "react-native";
+import React from "react";
+import { TouchableOpacity, Text, View } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type LogoutButtonProps = {
   onLogout?: () => void;
@@ -10,17 +10,10 @@ type LogoutButtonProps = {
 const LogoutButton: React.FC<LogoutButtonProps> = ({ onLogout }) => {
   const router = useRouter();
 
-  const handleLogout = async () => {
-    try {
-      await AsyncStorage.removeItem("userData");
+  const handleLogout = () => {
+    if (onLogout) onLogout();
 
-      if (onLogout) onLogout();
-
-      router.replace("/screens/auth/LoginScreen");
-    } catch (error) {
-      Alert.alert("Logout failed", "Unable to logout. Please try again.");
-      console.error("Logout error:", error);
-    }
+    router.replace("/screens/auth/LoginScreen");
   };
 
   return (
@@ -31,7 +24,9 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ onLogout }) => {
     >
       <View className="flex-row items-center">
         <MaterialIcons name="logout" size={22} color="white" />
-        <Text className="text-white text-base font-semibold ml-3">Logout</Text>
+        <Text className="text-white text-base font-semibold ml-3">
+          Logout
+        </Text>
       </View>
     </TouchableOpacity>
   );

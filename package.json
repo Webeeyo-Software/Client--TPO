@@ -13,7 +13,7 @@
   "dependencies": {
     "@expo/metro-runtime": "~5.0.4",
     "@react-native-async-storage/async-storage": "^2.1.2",
-    "@react-native-community/datetimepicker": "8.4.1",
+    "@react-native-community/datetimepicker": "^8.4.4",
     "@react-navigation/drawer": "^7.5.7",
     "axios": "^1.11.0",
     "expo": "^53.0.20",
@@ -21,7 +21,6 @@
     "expo-document-picker": "^13.1.6",
     "expo-router": "^5.1.4",
     "expo-status-bar": "~2.2.3",
-    "jwt-decode": "^4.0.0",
     "lucide-react-native": "^0.539.0",
     "nativewind": "latest",
     "react": "19.0.0",
@@ -35,8 +34,7 @@
     "react-native-reanimated": "~3.17.4",
     "react-native-safe-area-context": "5.4.0",
     "react-native-svg": "15.11.2",
-    "react-native-web": "^0.20.0",
-    "tailwind-merge": "^3.3.1"
+    "react-native-web": "^0.20.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
