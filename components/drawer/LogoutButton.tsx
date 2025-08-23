@@ -12,7 +12,7 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ onLogout }) => {
 
   const handleLogout = async () => {
     try {
-      await AsyncStorage.removeItem("userData");
+      await AsyncStorage.multiRemove(["userData", "authToken"]);
 
       if (onLogout) onLogout();
 

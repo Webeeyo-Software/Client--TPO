@@ -1,23 +1,24 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useRouter } from 'expo-router';
 import { useEffect } from 'react';
 import { ActivityIndicator, Image, View, Dimensions, StyleSheet } from 'react-native';
-import '../global.css';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRouter } from 'expo-router';
+
 const SplashScreen = () => {
   const router = useRouter();
   const { width } = Dimensions.get('window');
+
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
-        const userDataString = await AsyncStorage.getItem('userData');
-        const userData = userDataString ? JSON.parse(userDataString) : null;
-        if (userData?.token) {
+        const token = await AsyncStorage.getItem('authToken');
+
+        if (token && typeof token === 'string' && token.trim() !== '') {
           setTimeout(() => {
             router.replace('/navigation/drawer');
           }, 2000);
         } else {
           setTimeout(() => {
-            router.replace('/screens/auth/LoginScreen');
+            router.replace('/screens/auth/OnboardingScreen');
           }, 2000);
         }
       } catch (error) {
@@ -29,7 +30,7 @@ const SplashScreen = () => {
     };
 
     checkLoginStatus();
-  }, []);
+  }, [router]);
 
   return (
     <View style={styles.container}>

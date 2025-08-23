@@ -1,12 +1,23 @@
-import { useState, useRef, useEffect, useMemo } from 'react';
-import { View, TextInput, Animated, FlatList, Text, ActivityIndicator } from 'react-native';
+import  { useState, useRef, useEffect, useMemo } from 'react';
+import { FlatListProps } from 'react-native';
+
+import {
+  View,
+  TextInput,
+  Animated,
+  FlatList,
+  Text,
+  ActivityIndicator,
+  ListRenderItemInfo,
+} from 'react-native';
 import { CompanyCard } from '../../../components/applications/Drives/CompanyCard';
 import { Pagination } from '../../../components/applications/Drives/Pagination';
 import Feather from '@expo/vector-icons/Feather';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Header from 'components/ui/Header';
 import { useRouter } from 'expo-router';
-import { API_BASE_URL } from 'utils/api';
+import api from 'utils/authApi'; 
+
 
 type Company = {
   id: string;
@@ -26,60 +37,40 @@ type ApiResponse = {
   };
 };
 
-// Create animated FlatList wrapper
-const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList) as React.ComponentType<FlatListProps<Company>>;
+
 
 export default function DrivesScreen() {
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState<number>(1);
   const [companies, setCompanies] = useState<Company[]>([]);
-  const [totalPages, setTotalPages] = useState(10);
-  const [search, setSearch] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [totalPages, setTotalPages] = useState<number>(10);
+  const [search, setSearch] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+
   const router = useRouter();
   const scrollY = useRef(new Animated.Value(0)).current;
 
   const searchOpacity = useMemo(() => new Animated.Value(0), []);
   const searchTranslateY = useMemo(() => new Animated.Value(20), []);
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setPage(1);
-      fetchCompanies(1, search);
-    }, 700);
-    return () => clearTimeout(timeout);
-  }, [search]);
-
-  useEffect(() => {
-    if (page !== 1) fetchCompanies(page, search);
-  }, [page]);
-
   const fetchCompanies = async (pageNum: number, searchTerm: string) => {
     setLoading(true);
     try {
-      const baseURL = `${API_BASE_URL}/api/companies/search`;
       const query = new URLSearchParams({
         page: String(pageNum),
         search: searchTerm.trim(),
       }).toString();
 
-      const url = `${baseURL}?${query}`;
-
-      const response = await fetch(url);
-      if (!response.ok) {
-        console.error('[Fetch Companies] HTTP Error:', response.status);
-        setCompanies([]);
-        setTotalPages(1);
-        setLoading(false);
-        return;
-      }
-
-      const json: ApiResponse = await response.json();
+      const { data: json } = await api.get<ApiResponse>(
+        `/api/companies/search?${query}`
+      );
 
       if (json.success && Array.isArray(json.data)) {
-        const mappedCompanies = json.data.map((company) => ({
+        const mappedCompanies: Company[] = json.data.map((company) => ({
           ...company,
-          logo: require('../../../assets/images/icon.png'),
+          logo: require('../../../assets/images/companyLogo.png'),
         }));
+
         setCompanies(mappedCompanies);
         setTotalPages(json.pagination.totalPages);
       } else {
@@ -94,6 +85,21 @@ export default function DrivesScreen() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setPage(1);
+      fetchCompanies(1, search);
+    }, 700);
+
+    return () => clearTimeout(timeout);
+  }, [search]);
+
+  useEffect(() => {
+    if (page !== 1) {
+      fetchCompanies(page, search);
+    }
+  }, [page]);
 
   useEffect(() => {
     Animated.parallel([
@@ -113,19 +119,32 @@ export default function DrivesScreen() {
   }, [searchOpacity, searchTranslateY]);
 
   return (
-    <View className="flex-1 bg-white px-4 pt-12">
+    <View style={{ flex: 1, backgroundColor: 'white', paddingHorizontal: 16, paddingTop: 48 }}>
       <Header title="Companies" mode="normal" />
 
       <Animated.View
-        className="mx-1 mb-4 mt-5 flex-row items-center gap-3 rounded-xl bg-gray-100 px-3 py-2"
         style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginHorizontal: 4,
+          marginVertical: 16,
+          borderRadius: 12,
+          backgroundColor: '#F3F4F6',
+          paddingHorizontal: 12,
+          paddingVertical: 8,
           opacity: searchOpacity,
           transform: [{ translateY: searchTranslateY }],
-        }}>
+        }}
+      >
         <Feather name="search" size={20} color="black" />
         <TextInput
           placeholder="Search companies"
-          className="flex-1 text-base text-gray-700"
+          style={{
+            flex: 1,
+            fontSize: 16,
+            color: '#374151',
+            marginLeft: 8,
+          }}
           placeholderTextColor="#9CA3AF"
           value={search}
           onChangeText={setSearch}
@@ -143,14 +162,14 @@ export default function DrivesScreen() {
       </Animated.View>
 
       {loading ? (
-        <View className="flex-1 items-center justify-center">
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <ActivityIndicator size="large" color="#3B82F6" />
         </View>
       ) : (
         <AnimatedFlatList
           data={companies}
-          keyExtractor={(item: Company) => item.id}
-          renderItem={({ item, index }: { item: Company; index: number }) => {
+          keyExtractor={(item) => item.id}
+          renderItem={({ item, index }: ListRenderItemInfo<Company>) => {
             const inputRange = [-1, 0, 100 * index, 100 * (index + 2)];
             const scale = scrollY.interpolate({
               inputRange,
@@ -167,19 +186,26 @@ export default function DrivesScreen() {
                   logo={item.logo}
                   name={item.name}
                   type={item.description}
-                  onPress={() => router.push(`screens/companies/details/${item.id}`)}
+                  onPress={() =>
+                    router.push(`screens/companies/details/${item.id}`)
+                  }
                 />
               </Animated.View>
             );
           }}
-          onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
-            useNativeDriver: true,
-          })}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+            { useNativeDriver: true }
+          )}
           scrollEventThrottle={16}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 44, gap: 8, marginTop: 8 }}
+          contentContainerStyle={{
+            paddingBottom: 44,
+            paddingTop: 8,
+            gap: 8,
+          }}
           ListEmptyComponent={
-            <View className="mt-20 items-center">
+            <View style={{ marginTop: 80, alignItems: 'center' }}>
               <Text>No companies found.</Text>
             </View>
           }

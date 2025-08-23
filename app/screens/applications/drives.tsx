@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import  { useState, useRef, useEffect, useMemo } from 'react';
 import { View, Text, SafeAreaView, TextInput, Animated, FlatList } from 'react-native';
 import { CompanyCard } from '../../../components/applications/Drives/CompanyCard';
 import { Pagination } from '../../../components/applications/Drives/Pagination';

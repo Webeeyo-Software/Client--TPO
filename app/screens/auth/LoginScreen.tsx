@@ -17,8 +17,8 @@ import CheckboxWithLabel from 'components/auth/Login/CheckboxWithLabel';
 import PrimaryButton from 'components/ui/PrimaryButton';
 import Feather from '@expo/vector-icons/Feather';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { API_BASE_URL } from 'utils/api';
 import CustomAlert from '../../../components/ui/CustomAlert';
+import { API_BASE_URL } from 'utils/api';
 
 interface SavedCredential {
   email: string;
@@ -32,7 +32,7 @@ interface LoginResponse {
   firstname?: string;
 }
 
-const LoginScreen: React.FC = () => {
+const LoginScreen = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [rememberMe, setRememberMe] = useState<boolean>(false);
@@ -82,7 +82,7 @@ const LoginScreen: React.FC = () => {
     try {
       let updatedCreds = [...savedCredentials];
       const index = updatedCreds.findIndex(
-        c => c.email.toLowerCase() === emailToSave.toLowerCase()
+        (c) => c.email.toLowerCase() === emailToSave.toLowerCase()
       );
       if (index >= 0) {
         updatedCreds[index] = { email: emailToSave, password: passwordToSave };
@@ -116,17 +116,17 @@ const LoginScreen: React.FC = () => {
 
       const { token, userId, role, firstname } = response.data;
 
-      await AsyncStorage.setItem(
-        'userData',
-        JSON.stringify({ token, userId, role, firstname })
-      );
+      // Save token + user data securely in AsyncStorage
+      await AsyncStorage.setItem('authToken', token);
+      await AsyncStorage.setItem('userData', JSON.stringify({ userId, role, firstname }));
 
+      // Save credentials if "Remember Me" checked
       if (rememberMe) {
         await saveCredential(email.trim().toLowerCase(), password.trim());
       }
 
       showAlert('Login', 'Successful');
-      router.replace('navigation/drawer');
+      router.replace('/navigation/drawer');
     } catch (error: any) {
       showAlert(
         'Login Failed',
@@ -174,8 +174,7 @@ const LoginScreen: React.FC = () => {
               pathname: 'screens/auth/ForgotPasswordScreen',
               params: { email },
             })
-          }
-        >
+          }>
           <Text className="text-sm font-medium text-[#1877F2]">Forgot password?</Text>
         </TouchableOpacity>
       </View>
@@ -188,7 +187,7 @@ const LoginScreen: React.FC = () => {
             <Text className="text-lg font-semibold mb-4">Select saved account</Text>
             <FlatList
               data={savedCredentials}
-              keyExtractor={item => item.email}
+              keyExtractor={(item) => item.email}
               renderItem={({ item }) => (
                 <Pressable
                   onPress={() => selectSavedCredential(item)}
