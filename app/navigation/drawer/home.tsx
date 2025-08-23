@@ -1,5 +1,6 @@
-import React, { useRef, useEffect, useMemo, useCallback } from 'react';
-import { View, Text, Animated, Dimensions, FlatList } from 'react-native';
+import React, { useRef, useEffect, useMemo, useCallback, useState } from 'react';
+import { View, Text, Animated, FlatList } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import MenuCard from '../../../components/home/MenuCard';
 import { useRouter } from 'expo-router';
 
@@ -13,6 +14,7 @@ const icons = {
   tporeg: require('../../../assets/images/tporeg.png'),
   quesb: require('../../../assets/images/quesb.png'),
 };
+
 const DATA = [
   { title: 'Companies', description: 'Explore companies and opportunities', icon: icons.companies },
   { title: 'Applications', description: 'Manage your applications', icon: icons.applications },
@@ -31,6 +33,7 @@ const DATA = [
   },
   { title: 'Question bank', description: 'Access previous year Questions', icon: icons.quesb },
 ];
+
 const ROUTE_MAP: Record<string, string> = {
   Companies: 'screens/companies',
   Applications: 'screens/applications',
@@ -41,11 +44,21 @@ const ROUTE_MAP: Record<string, string> = {
   'TPO Registration': 'screens/tpoRegistration',
   'Question bank': '/screens/questionsBank',
 };
+
 const CARD_HEIGHT = 100;
 
-const HomeScreen = () => {
+interface UserData {
+  token: string;
+  userId: string;
+  role: string;
+  firstname?: string;
+}
+
+const HomeScreen: React.FC = () => {
   const scrollY = useRef(new Animated.Value(0)).current;
   const router = useRouter();
+
+  const [firstName, setFirstName] = useState<string | null>(null);
 
   const imageOpacity = useMemo(() => new Animated.Value(0), []);
   const imageTranslateY = useMemo(() => new Animated.Value(20), []);
@@ -53,6 +66,22 @@ const HomeScreen = () => {
   const textTranslateY = useMemo(() => new Animated.Value(20), []);
 
   useEffect(() => {
+    const loadUserName = async () => {
+      try {
+        const userDataStr = await AsyncStorage.getItem('userData');
+        if (userDataStr) {
+          const userData: UserData = JSON.parse(userDataStr);
+          if (userData.firstname) setFirstName(userData.firstname);
+          else setFirstName(null);
+        }
+      } catch (error) {
+        console.warn('Failed to load user first name:', error);
+        setFirstName(null);
+      }
+    };
+
+    loadUserName();
+
     Animated.parallel([
       Animated.timing(imageOpacity, {
         toValue: 1,
@@ -79,11 +108,14 @@ const HomeScreen = () => {
     ]).start();
   }, [imageOpacity, imageTranslateY, textOpacity, textTranslateY]);
 
-const handleCardPress = useCallback((title: string) => {
-  const path = ROUTE_MAP[title];
-  if (path) router.push(path);
-  else console.warn(`No route defined for ${title}`);
-}, [router]);
+  const handleCardPress = useCallback(
+    (title: string) => {
+      const path = ROUTE_MAP[title];
+      if (path) router.push(path);
+      else console.warn(`No route defined for ${title}`);
+    },
+    [router]
+  );
 
   return (
     <View className="flex-1 bg-white px-4 pt-12">
@@ -101,9 +133,12 @@ const handleCardPress = useCallback((title: string) => {
           style={{
             opacity: textOpacity,
             transform: [{ translateY: textTranslateY }],
-          }}>
+          }}
+        >
           <Text className="text-left text-4xl font-extrabold text-black">Hello</Text>
-          <Text className="mt-1 text-left text-5xl font-extrabold text-[#1877F2]">Abhishek..!</Text>
+          <Text className="mt-1 text-left text-5xl font-extrabold text-[#1877F2]">
+            {firstName ? `${firstName}..!` : 'User..!'}
+          </Text>
         </Animated.View>
       </View>
       <Animated.FlatList

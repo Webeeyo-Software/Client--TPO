@@ -69,7 +69,7 @@ const InputField: React.FC<InputFieldProps> = ({
       {label ? (
         <Text className="text-m text-gray-700 mb-1 font-semibold">
           {label}
-          {required && <Text className="text-red-600">*</Text>}
+          {required && <Text className="text-red-600"></Text>}
         </Text>
       ) : null}
 
