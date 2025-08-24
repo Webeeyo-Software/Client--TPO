@@ -11,27 +11,58 @@
     "web": "expo start --web"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@expo/vector-icons": "^14.1.0",
     "@react-native-async-storage/async-storage": "^2.2.0",
+=======
+    "@react-native-async-storage/async-storage": "^2.1.2",
+    "@react-native-community/checkbox": "^0.5.20",
+    "@react-native-community/datetimepicker": "8.4.1",
+>>>>>>> origin/dev-final
     "@react-navigation/drawer": "^7.5.7",
+    "axios": "^1.11.0",
     "expo": "^53.0.20",
+<<<<<<< HEAD
     "expo-checkbox": "~4.1.4",
     "expo-document-picker": "~13.1.6",
     "expo-router": "~5.1.4",
+=======
+    "expo-checkbox": "^4.1.4",
+    "expo-document-picker": "^13.1.6",
+    "expo-router": "^5.1.4",
+>>>>>>> origin/dev-final
     "expo-status-bar": "~2.2.3",
+    "jwt-decode": "^4.0.0",
+    "lottie-react-native": "^7.3.2",
     "lucide-react-native": "^0.539.0",
     "nativewind": "latest",
+<<<<<<< HEAD
     "react": "19.0.0",
+=======
+    "react": "^19.0.0",
+>>>>>>> origin/dev-final
     "react-dom": "19.0.0",
     "react-native": "0.79.5",
-    "react-native-gesture-handler": "^2.28.0",
+    "react-native-coachmark": "^0.3.0",
+    "react-native-gesture-handler": "~2.24.0",
     "react-native-heroicons": "^4.0.0",
+<<<<<<< HEAD
     "react-native-modal-datetime-picker": "^18.0.0",
+=======
+    "react-native-modal": "^14.0.0-rc.1",
+    "react-native-paper": "^5.14.5",
+>>>>>>> origin/dev-final
     "react-native-picker-select": "^9.3.1",
     "react-native-reanimated": "~3.17.4",
     "react-native-safe-area-context": "5.4.0",
     "react-native-svg": "15.11.2",
+<<<<<<< HEAD
     "react-native-vector-icons": "^10.3.0"
+=======
+    "react-native-walkthrough-tooltip": "^1.6.0",
+    "react-native-web": "^0.20.0",
+    "tailwind-merge": "^3.3.1"
+>>>>>>> origin/dev-final
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

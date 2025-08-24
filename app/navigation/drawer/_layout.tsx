@@ -13,7 +13,6 @@ export default function DrawerLayout() {
   screenOptions={({ navigation }: { navigation: DrawerNavigationProp<ParamListBase> }) => ({
     headerShown: true,
     headerTitle: '',
-    headerTransparent: true,
     headerLeft: () => (
       <TouchableOpacity
         onPress={() => navigation.toggleDrawer()}

@@ -7,13 +7,19 @@ import {
   TextInputProps,
   Platform,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
-import { Ionicons } from '@expo/vector-icons';
+type InputType =
+  | "text"
+  | "password"
+  | "textarea"
+  | "date"
+  | "email"
+  | "number";
 
-type InputType = "text" | "password" | "textarea" | "date" | "email" | "number" ;
-
-interface InputFieldProps extends Omit<TextInputProps, "secureTextEntry" | "multiline"> {
-  label: string;
+interface InputFieldProps
+  extends Omit<TextInputProps, "secureTextEntry" | "multiline"> {
+  label?: string; // Made optional
   placeholder?: string;
   type?: InputType;
   value: string;
@@ -22,6 +28,7 @@ interface InputFieldProps extends Omit<TextInputProps, "secureTextEntry" | "mult
   maxLength?: number;
   showDropdown?: boolean;
   renderIcon?: (showPassword: boolean, toggle: () => void) => React.ReactNode;
+  frontIcon?: React.ReactNode; // Leading icon
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -34,6 +41,7 @@ const InputField: React.FC<InputFieldProps> = ({
   maxLength,
   renderIcon,
   keyboardType,
+  frontIcon,
   ...rest
   
 }) => {
@@ -59,12 +67,18 @@ const InputField: React.FC<InputFieldProps> = ({
 
   return (
     <View className="mb-4">
-      <Text className="text-m text-gray-700 mb-1 font-semibold">
-        {label}
-        {required && <Text className="text-red-600"></Text>}
-      </Text>
+      {/* Render label only if provided */}
+      {label ? (
+        <Text className="text-m text-gray-700 mb-1 font-semibold">
+          {label}
+          {required && <Text className="text-red-600"></Text>}
+        </Text>
+      ) : null}
 
-      <View className="flex-row items-center border border-gray-300 rounded-md px-4 py-3">
+      <View className="flex-row items-center border border-gray-300 rounded-md px-3 py-3">
+        {/* Front icon if passed */}
+        {frontIcon ? <View className="mr-3">{frontIcon}</View> : null}
+
         <TextInput
           style={{ flex: 1 }}
           placeholder={placeholder}
@@ -77,10 +91,11 @@ const InputField: React.FC<InputFieldProps> = ({
           keyboardType={resolvedKeyboardType}
           placeholderTextColor="#9ca3af"
           {...rest}
-          accessibilityLabel={label + (required ? " required" : "")}
+          accessibilityLabel={label ? label + (required ? " required" : "") : placeholder}
           className="text-base text-gray-900 p-0 m-0"
         />
 
+        {/* Password eye toggle */}
         {isPassword && (
           <TouchableOpacity
             onPress={toggleShowPassword}
