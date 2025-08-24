@@ -9,7 +9,7 @@ type ProgressCardProps = {
 };
 const ProgressCard=({ education, university, instituteName, percentage, passingYear, highestQualification }: ProgressCardProps)=>{
     return(
-    <View className="mt-3 rounded-lg overflow-hidden border border-gray-300">
+    <View className="mt-2 rounded-lg overflow-hidden border border-gray-300 mb-2">
         <View className="bg-blue-500 p-3">
           <Text className="text-white font-bold">{highestQualification}</Text>
         </View>

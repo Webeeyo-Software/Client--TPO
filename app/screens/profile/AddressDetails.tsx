@@ -103,7 +103,7 @@ const AddressDetailsScreen: React.FC = () => {
   }
 
   return (
-    <View className="flex-1 bg-white mt-12">
+    <View className="flex-1 bg-white px-4 pt-12">
       <Header title="Address Details" />
 
       <ScrollView className="p-4">

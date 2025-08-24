@@ -8,8 +8,8 @@ const InputRow = ()=>{
     const[ GraduationCPI,setGraduationCPI] = useState('');
     const[ PostGraduationCPI,setPostGraduationCPI] = useState('');
    return(
-    <View>
-      <View className="flex-row justify-between my-1">
+    <View className='mx-5 mt-5'>
+      <View className="flex-row justify-between">
               <View className="flex-1 mr-2">
                 <Text>Highest Qualification:</Text>
                 <TextInput 

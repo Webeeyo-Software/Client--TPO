@@ -13,7 +13,7 @@ const ResultCard = () => {
   const [action, setAction] = useState("");
 
   return (
-    <View className="bg-white border border-gray-200 p-6 mb-4 mt-8 shadow-xl px-4 rounded-2xl">
+    <View className="flex-col  justify-between rounded-xl border border-gray-200 bg-gray-50 p-4 mt-2 mb-2">
       <Text className="text-xl font-semibold mt-4 mb-4">Second Year</Text>
 
       <InputField

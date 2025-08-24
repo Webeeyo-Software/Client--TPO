@@ -45,51 +45,24 @@ const ExaminationDetails = () => {
   }
 
   return (
-    <View className="px-2 flex-1">
-      <View className="px-4 mt-2 mb-0">
-        <Header title="Examination Details" />
-        <InputField
-          label="Current Degree Latest CGPA/CPI"
-          placeholder="Enter your CGPA/CPI"
-          value={degreeDetails.cgpa}
-          editable={false} // If it's fetched from backend
-          className=""
-          onChangeText={() => {}}
-        />
-      </View>
-
-      <View className="mt-2">
-        <View className="px-4 ">
-              {/* Dead Backlogs */}
-              <View className="flex-row items-center mt-2">
-                <Text className="text-base font-medium">No of dead Backlogs: </Text>
-                <TextInput
-                  value={dead}
-                  onChangeText={setDead}
-                  placeholder="0"
-                  keyboardType="numeric"
-                  className=" w-12 text-gray-700 text-base mt-"
-                />
-              </View>
-        
-              {/* Active Backlogs */}
-              <View className="flex-row items-center ">
-                <Text className="text-base font-medium">No of active Backlogs: </Text>
-                <TextInput
-                  value={active}
-                  onChangeText={setActive}
-                  placeholder="0"
-                  keyboardType="numeric"
-                  className=" w-12 text-gray-700 text-base"
-                />
-              </View>
-            </View>
-      </View>
-
-      <ScrollView
-        className="mt-4"
-        showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
+    <View className="px-2">
+    <View className="px-4 mt-2 mb-0 ">
+      <Header title="Examination Details" />
+       <InputField
+        label="Current Degree Latest CGPA/CPI"
+        placeholder="Enter your CGPA/CPI"
+        value={Degree}
+        onChangeText={setDegree}
+        required
+        className=""
+       />
+       </View>
+       <View className="mt-0">
+        <BackLogStatus />
+        </View>
+      <ScrollView className="mt-4" 
+      showsVerticalScrollIndicator={false}
+      showsHorizontalScrollIndicator={false}
       >
         {degreeDetails.results.length > 0 ? (
           degreeDetails.results.map((result, index) => (

@@ -70,9 +70,9 @@ const PersonalDetails: React.FC = () => {
   };
 
   return (
-    <View className="flex-1 bg-white p-5 mt-10">
+    <View className="flex-1 bg-white px-4 pt-12">
       <Header title="Personal details" />
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} className="mx-5 mt-5">
         {/* Full Name */}
         <InputField
           label="Full Name"
@@ -220,13 +220,11 @@ const PersonalDetails: React.FC = () => {
           onChangeText={(val) => handleChange("guardianContact", val)}
           keyboardType="phone-pad"
           required
-        />
-
-        {/* Save Button */}
-        <View className="mt-5 mb-10">
+        />        
+      </ScrollView>
+      <View className="mb-10">
           <PrimaryButton label="Save" onPress={handleSubmit} />
         </View>
-      </ScrollView>
     </View>
   );
 };
