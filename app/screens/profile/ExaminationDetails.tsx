@@ -51,14 +51,14 @@ const ExaminationDetails = () => {
        <InputField
         label="Current Degree Latest CGPA/CPI"
         placeholder="Enter your CGPA/CPI"
-        value={Degree}
-        onChangeText={setDegree}
+        value={dead}
+        onChangeText={setDead}
         required
         className=""
        />
        </View>
        <View className="mt-0">
-        <BackLogStatus />
+        
         </View>
       <ScrollView className="mt-4" 
       showsVerticalScrollIndicator={false}
