@@ -14,7 +14,7 @@ const ProfileScreen = () => {
       <Header title="Profile" />
       <ProfileCard/>
       <ScrollView className="">
-      <DetailsCard label="Personal Details" onPress={() => router.push('../profile/PersonalDetails')}  />
+            <DetailsCard label="Personal Details" onPress={() => router.push('../profile/PersonalDetails')}  />
       <DetailsCard label="Address Details" onPress={() => router.push('../profile/AddressDetails.tsx')} />
       <DetailsCard label="Examination Details" onPress={() => router.push('../profile/ExaminationDetails.tsx')} />
       <DetailsCard label="Academics" onPress={() => router.push('../profile/Academics.tsx')} />
