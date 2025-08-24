@@ -1,10 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { View, ScrollView } from "react-native";
+import { View, ScrollView, Alert } from "react-native";
+import axios from "axios";
 import Header from "components/ui/Header";
 import InputField from "components/ui/InputField";
 import Checkbox from "components/profile/AddressCheckbox";
 import PrimaryButton from "components/ui/PrimaryButton";
 import Dropdown from "components/profile/DropDown";
+
+type AddressDetailsProps = {
+  localAddress: string;
+  permanentAddress: string;
+  sameAsLocal: boolean;
+  pincode: string;
+  country: string;
+  state: string;
+  district: string;
+};
 
 // ✅ Centralized dropdown data
 const COUNTRY_OPTIONS = [
@@ -26,21 +37,62 @@ const DISTRICT_OPTIONS = [
 ];
 
 const AddressDetailsScreen: React.FC = () => {
-  const [localAddress, setLocalAddress] = useState("ABC Corner, randomnagar., 452350");
-  const [permanentAddress, setPermanentAddress] = useState("ABC Corner, randomnagar., 452350");
-  const [sameAsLocal, setSameAsLocal] = useState(false);
+  const [addressDetails, setAddressDetails] = useState<AddressDetailsProps>({
+    localAddress: "",
+    permanentAddress: "",
+    sameAsLocal: false,
+    pincode: "",
+    country: "",
+    state: "",
+    district: "",
+  });
 
-  const [pincode, setPincode] = useState("452350");
-  const [country, setCountry] = useState("India");
-  const [state, setState] = useState("Maharashtra");
-  const [district, setDistrict] = useState("Pune");
+  // ✅ Handle input change
+  const handleChange = (
+    key: keyof AddressDetailsProps,
+    value: string | boolean
+  ) => {
+    setAddressDetails((prev) => ({ ...prev, [key]: value }));
+  };
+
+  // ✅ API call to fetch data by ID
+  const fetchAddressDetails = async (id: string) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/api/profile/address-details/122102` // 👈 replace with your real API
+      );
+      setAddressDetails(response.data); // assumes API returns same structure
+    } catch (error) {
+      console.error("Error fetching address:", error);
+      Alert.alert("Error", "Failed to load address details.");
+    }
+  };
+
+  // ✅ Call API on mount
+  useEffect(() => {
+    fetchAddressDetails("123"); // 👈 pass dynamic id (maybe from props or redux)
+  }, []);
 
   // ✅ Auto-fill permanent address if "same as local"
   useEffect(() => {
-    if (sameAsLocal) {
-      setPermanentAddress(localAddress);
+    if (addressDetails.sameAsLocal) {
+      handleChange("permanentAddress", addressDetails.localAddress);
     }
-  }, [sameAsLocal, localAddress]);
+  }, [addressDetails.sameAsLocal, addressDetails.localAddress]);
+
+  // ✅ Submit handler (Save)
+  const handleSubmit = async () => {
+    try {
+      await axios.put(
+        `http://your-api.com/address/123`, // 👈 replace with your API
+        addressDetails
+      );
+      Alert.alert("Success", "Address details updated successfully!");
+    } catch (error) {
+      console.error("Error saving address:", error);
+      Alert.alert("Error", "Failed to save address details.");
+    }
+  };
 
   return (
     <View className="flex-1 bg-white mt-12">
@@ -51,8 +103,8 @@ const AddressDetailsScreen: React.FC = () => {
         <InputField
           label="Local Address"
           placeholder="Enter your address"
-          value={localAddress}
-          onChangeText={setLocalAddress}
+          value={addressDetails.localAddress}
+          onChangeText={(text) => handleChange("localAddress", text)}
           required
         />
 
@@ -60,17 +112,19 @@ const AddressDetailsScreen: React.FC = () => {
         <InputField
           label="Permanent Address"
           placeholder="Enter your address"
-          value={permanentAddress}
-          onChangeText={setPermanentAddress}
-          editable={!sameAsLocal}
+          value={addressDetails.permanentAddress}
+          onChangeText={(text) => handleChange("permanentAddress", text)}
+          editable={!addressDetails.sameAsLocal}
           required
         />
 
         {/* Checkbox */}
         <Checkbox
-          checked={sameAsLocal}
+          checked={addressDetails.sameAsLocal}
           label="Permanent Address is same as Local Address"
-          onToggle={() => setSameAsLocal(!sameAsLocal)}
+          onToggle={() =>
+            handleChange("sameAsLocal", !addressDetails.sameAsLocal)
+          }
         />
 
         {/* Pincode + Country */}
@@ -79,8 +133,8 @@ const AddressDetailsScreen: React.FC = () => {
             <InputField
               label="Pincode"
               placeholder="Enter pincode"
-              value={pincode}
-              onChangeText={setPincode}
+              value={addressDetails.pincode}
+              onChangeText={(text) => handleChange("pincode", text)}
               required
             />
           </View>
@@ -88,8 +142,8 @@ const AddressDetailsScreen: React.FC = () => {
           <View className="flex-1">
             <Dropdown
               label="Country"
-              value={country}
-              onValueChange={setCountry}
+              value={addressDetails.country}
+              onValueChange={(val) => handleChange("country", val)}
               items={COUNTRY_OPTIONS}
             />
           </View>
@@ -100,8 +154,8 @@ const AddressDetailsScreen: React.FC = () => {
           <View className="flex-1 mr-2">
             <Dropdown
               label="State"
-              value={state}
-              onValueChange={setState}
+              value={addressDetails.state}
+              onValueChange={(val) => handleChange("state", val)}
               items={STATE_OPTIONS}
             />
           </View>
@@ -109,15 +163,15 @@ const AddressDetailsScreen: React.FC = () => {
           <View className="flex-1">
             <Dropdown
               label="District"
-              value={district}
-              onValueChange={setDistrict}
+              value={addressDetails.district}
+              onValueChange={(val) => handleChange("district", val)}
               items={DISTRICT_OPTIONS}
             />
           </View>
         </View>
 
         {/* Save button */}
-        <PrimaryButton label="Save" onPress={() => console.log("Saved")} />
+        <PrimaryButton label="Save" onPress={handleSubmit} />
       </ScrollView>
     </View>
   );
