@@ -1,24 +1,30 @@
 import React, { useEffect, useRef } from "react";
 import { Text, View, Animated, Easing } from "react-native";
 
-const Title: React.FC = () => {
+interface TitleProps {
+  title1: string;
+  title2: string;
+}
+
+const Title: React.FC<TitleProps> = ({ title1, title2 }) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  const translateY = useRef(new Animated.Value(20)).current; 
+  const translateY = useRef(new Animated.Value(20)).current;
 
   useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 800,
-      useNativeDriver: true,
-      easing: Easing.out(Easing.ease),
-    }).start();
-
-    Animated.timing(translateY, {
-      toValue: 0,
-      duration: 800,
-      useNativeDriver: true,
-      easing: Easing.out(Easing.ease),
-    }).start();
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 800,
+        useNativeDriver: true,
+        easing: Easing.out(Easing.ease),
+      }),
+      Animated.timing(translateY, {
+        toValue: 0,
+        duration: 800,
+        useNativeDriver: true,
+        easing: Easing.out(Easing.ease),
+      }),
+    ]).start();
   }, [fadeAnim, translateY]);
 
   return (
@@ -28,9 +34,9 @@ const Title: React.FC = () => {
           opacity: fadeAnim,
           transform: [{ translateY }],
         }}
-        className="text-6xl font-bold text-black leading-tight"
+        className="text-7xl font-bold text-black leading-tight"
       >
-        Empower{"\n"}Your Skills
+        {title1}
       </Animated.Text>
 
       <Animated.Text
@@ -38,9 +44,9 @@ const Title: React.FC = () => {
           opacity: fadeAnim,
           transform: [{ translateY }],
         }}
-        className="text-6xl font-bold text-[#1877F2] leading-tight"
+        className="text-5xl font-bold text-[#1877F2] leading-tight"
       >
-        Explore Top{"\n"}Placements
+        {title2}
       </Animated.Text>
     </View>
   );

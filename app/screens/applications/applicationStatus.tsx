@@ -1,4 +1,3 @@
-import React from 'react';
 import { View, Text, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
 import { ProgressBar } from '../../../components/applications/applicationStatus/ProgressBar';
 import { StatusStep } from '../../../components/applications/applicationStatus/StatusStep';

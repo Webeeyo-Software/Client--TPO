@@ -1,4 +1,3 @@
-import React from "react";
 import { View, SafeAreaView } from "react-native";
 import Logo from "components/auth/Logo";
 import SuccessMessage from "components/auth/SuccessMessage";

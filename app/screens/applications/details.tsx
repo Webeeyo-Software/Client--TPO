@@ -1,5 +1,4 @@
 import { View, ScrollView, Text, TouchableOpacity } from "react-native";
-import React from "react";
 import { SectionHeader } from "../../../components/applications/companyDetails/SectionHeader";
 import { CompanyAttachments } from "../../../components/applications/companyDetails/CompanyAttachments";
 import { CriteriaItem } from "../../../components/applications/companyDetails/CriteriaItem";

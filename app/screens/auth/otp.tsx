@@ -1,42 +1,72 @@
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
-import Header from "components/ui/Header";
-import OTPInput from "components/auth/ForgotPass/OTPInput";
-import Countdown from "components/auth/ForgotPass/Countdown";
-import PrimaryButton from "components/ui/PrimaryButton";
-import { router } from "expo-router";
+import { useState } from 'react';
+import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { API_BASE_URL } from 'utils/api';
+import Header from 'components/ui/Header';
+import Title from 'components/auth/Login/Title';
+import OtpInput from 'components/auth/ForgotPass/OTPInput';
 
 const OtpVerificationScreen: React.FC = () => {
-  const [otp, setOtp] = useState("");
+  const [otp, setOtp] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = () => {
-    console.log("OTP Submitted:", otp);
-    router.push('screens/auth/resetPassScreen');
+  const params = useLocalSearchParams();
+  const email = params?.email as string;
+  const router = useRouter();
+
+  const handleSubmit = async () => {
+    if (!otp) {
+      setError('Enter OTP');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await fetch(`${API_BASE_URL}/auth/otp-verification`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, otp }),
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        Alert.alert('Success', 'OTP verified');
+        router.replace({ pathname: '/screens/auth/resetPassScreen', params: { email } });
+      } else {
+        setError('Invalid OTP');
+      }
+    } catch {
+      Alert.alert('Error', 'Network error');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <View className="flex-1 bg-white px-4 pt-12">
       <Header title="" />
+      <Title title1="OTP" title2="Verification" />
+      <OtpInput
+        label="Enter Otp"
+        value={otp}
+        onChange={(val: string) => {
+          setOtp(val);
+          setError(null);
+        }}
+        length={6}
+        error={error}
+      />
 
-      <View className="px-6 mt-4">
-        <Text className="text-2xl font-extrabold text-center text-gray-800">
-          OTP Verification
+      <TouchableOpacity
+        onPress={handleSubmit}
+        disabled={loading}
+        className="mt-6 rounded-lg bg-blue-600 p-4">
+        <Text className="text-center text-base text-white">
+          {loading ? 'Verifying...' : 'Submit'}
         </Text>
-        <Text className="text-center text-gray-500 mt-2">
-          Enter the OTP sent to +67-1234-5678-9
-        </Text>
-
-        <OTPInput onChange={setOtp} />
-
-        <Countdown
-          initialSeconds={56}
-          onResend={() => console.log("Resend OTP")}
-        />
-      </View>
-
-        <View className="mt-96 pt-56">
-        <PrimaryButton label="Submit" onPress={handleSubmit} />
-        </View>
+      </TouchableOpacity>
     </View>
   );
 };
