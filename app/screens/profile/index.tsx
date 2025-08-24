@@ -1,13 +1,30 @@
-import { View, Text } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import '../../../global.css';
+import React from 'react';
+import {View,Text,ScrollView} from 'react-native';
+import Header from 'components/ui/Header';
+import ProfileCard from 'components/profile/ProfileCard';
+import DetailsCard from 'components/profile/DetailsCard';
 
-export default function profile() {
-  return (
-      <SafeAreaView>
-        <View className='items-center justify-center bg-[#1877F2] py-60 m-11 rounded-lg mt-60'>
-          <Text text-xl>Profile</Text>
-        </View>
-      </SafeAreaView>
+
+import PrimaryButton from 'components/ui/PrimaryButton';
+import { useRouter } from 'expo-router';
+const ProfileScreen = () => {
+  const router = useRouter();
+  return(
+    <View className="flex-1 bg-white px-4 pt-12">
+      <Header title="Profile" />
+      <ProfileCard/>
+      <ScrollView className="">
+      <DetailsCard label="Personal Details" onPress={() => router.push('screens/profile/PersonalDetails')}  />
+      <DetailsCard label="Address Details" onPress={() => router.push('screens/profile/AddressDetails')} />
+      <DetailsCard label="Examination Details" onPress={() => router.push('screens/profile/ExaminationDetails')} />
+      <DetailsCard label="Academics" onPress={() => router.push('screens/profile/AcademicsDetails')} />
+      <DetailsCard label="Offer Letter" onPress={() => router.push('screens/profile/OfferLetter')} />
+      <DetailsCard label="Upload CV" onPress={() => router.push('screens/profile/UploadCVS')} />
+      <PrimaryButton label="Save Changes" onPress={() => {}}  />
+      
+      </ScrollView>
+      </View>
+  
   );
 }
+export default ProfileScreen;
