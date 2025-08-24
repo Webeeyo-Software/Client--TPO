@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, ScrollView, Alert } from "react-native";
+import { View, ScrollView, Alert, ActivityIndicator } from "react-native";
 import axios from "axios";
 import Header from "components/ui/Header";
 import InputField from "components/ui/InputField";
 import Checkbox from "components/profile/AddressCheckbox";
 import PrimaryButton from "components/ui/PrimaryButton";
 import Dropdown from "components/profile/DropDown";
+
+const BASE_URL = "http://192.168.1.30:3000";
 
 type AddressDetailsProps = {
   localAddress: string;
@@ -15,6 +17,11 @@ type AddressDetailsProps = {
   country: string;
   state: string;
   district: string;
+};
+
+type ApiResponse = {
+  success: boolean;
+  data: AddressDetailsProps[];
 };
 
 // ✅ Centralized dropdown data
@@ -37,6 +44,8 @@ const DISTRICT_OPTIONS = [
 ];
 
 const AddressDetailsScreen: React.FC = () => {
+  const [loading, setLoading] = useState<boolean>(false);
+
   const [addressDetails, setAddressDetails] = useState<AddressDetailsProps>({
     localAddress: "",
     permanentAddress: "",
@@ -47,52 +56,51 @@ const AddressDetailsScreen: React.FC = () => {
     district: "",
   });
 
-  // ✅ Handle input change
-  const handleChange = (
-    key: keyof AddressDetailsProps,
-    value: string | boolean
-  ) => {
-    setAddressDetails((prev) => ({ ...prev, [key]: value }));
+  // ✅ Handle input changes in a single place
+  const handleChange = (field: keyof AddressDetailsProps, value: string | boolean) => {
+    setAddressDetails((prev) => ({
+      ...prev,
+      [field]: value,
+      // Auto-fill permanent address if sameAsLocal = true
+      ...(field === "sameAsLocal" && value
+        ? { permanentAddress: prev.localAddress }
+        : {}),
+    }));
   };
 
-  // ✅ API call to fetch data by ID
-  const fetchAddressDetails = async (id: string) => {
+  // ✅ Fetch address details from backend
+  const fetchAddressDetails = async () => {
+    setLoading(true);
     try {
-      const response = await axios.get(
-        `http://localhost:3000/api/profile/address-details/122102` // 👈 replace with your real API
+      const registrationNo = "122102";
+      const { data: json } = await axios.get<ApiResponse>(
+        `${BASE_URL}/api/profile/address-details/${registrationNo}`
       );
-      setAddressDetails(response.data); // assumes API returns same structure
+
+      if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+        setAddressDetails(json.data[0]);
+      }
     } catch (error) {
-      console.error("Error fetching address:", error);
-      Alert.alert("Error", "Failed to load address details.");
+      console.error("[Fetch Address Details] Error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // ✅ Call API on mount
+  // ✅ Save address details
+  
+
   useEffect(() => {
-    fetchAddressDetails("123"); // 👈 pass dynamic id (maybe from props or redux)
+    fetchAddressDetails();
   }, []);
 
-  // ✅ Auto-fill permanent address if "same as local"
-  useEffect(() => {
-    if (addressDetails.sameAsLocal) {
-      handleChange("permanentAddress", addressDetails.localAddress);
-    }
-  }, [addressDetails.sameAsLocal, addressDetails.localAddress]);
-
-  // ✅ Submit handler (Save)
-  const handleSubmit = async () => {
-    try {
-      await axios.put(
-        `http://your-api.com/address/123`, // 👈 replace with your API
-        addressDetails
-      );
-      Alert.alert("Success", "Address details updated successfully!");
-    } catch (error) {
-      console.error("Error saving address:", error);
-      Alert.alert("Error", "Failed to save address details.");
-    }
-  };
+  if (loading) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <ActivityIndicator size="large" color="blue" />
+      </View>
+    );
+  }
 
   return (
     <View className="flex-1 bg-white mt-12">
@@ -122,9 +130,7 @@ const AddressDetailsScreen: React.FC = () => {
         <Checkbox
           checked={addressDetails.sameAsLocal}
           label="Permanent Address is same as Local Address"
-          onToggle={() =>
-            handleChange("sameAsLocal", !addressDetails.sameAsLocal)
-          }
+          onToggle={() => handleChange("sameAsLocal", !addressDetails.sameAsLocal)}
         />
 
         {/* Pincode + Country */}
@@ -171,7 +177,7 @@ const AddressDetailsScreen: React.FC = () => {
         </View>
 
         {/* Save button */}
-        <PrimaryButton label="Save" onPress={handleSubmit} />
+        <PrimaryButton label="Save" onPress={() => {}} />
       </ScrollView>
     </View>
   );
