@@ -31,7 +31,8 @@ const OfferLetterScreen: React.FC = () => {
   };
 
   return (
-    <View className="flex-1 bg-white p-5">
+    // <View className="flex-1 bg-white p-5">
+     <View className="flex-1 bg-white ">
       <Header 
        title="Upload Offer Letter" />
 

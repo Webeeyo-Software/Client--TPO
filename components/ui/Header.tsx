@@ -7,7 +7,6 @@ type HeaderProps = {
   title: string;
   mode?: 'normal' | 'close'; 
 };
-
 export default function Header({ title, mode = 'normal' }: HeaderProps) {
   const router = useRouter();
 

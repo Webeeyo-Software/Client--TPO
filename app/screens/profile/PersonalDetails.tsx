@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { View, Text, ScrollView } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import InputField from "components/ui/InputField";
+import Header from "components/ui/Header";
 import PrimaryButton from "components/ui/PrimaryButton";
+import InputFieldCalendar from "components/profile/InputFieldCalender";
 
 const PersonalDetails = () => {
   const [fullName, setFullName] = useState("");
@@ -25,8 +27,8 @@ const PersonalDetails = () => {
   const [guardianContact, setGuardianContact] = useState("");
 
   return (
-    <View className="flex-1 bg-white p-5">
-      <Text className="text-2xl font-bold mb-5">Personal Details</Text>
+    <View className="flex-1 bg-white px-2">
+      <Header title="Personal Details" />
 
       {/* Scrollable form fields */}
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -46,13 +48,19 @@ const PersonalDetails = () => {
           required
         />
 
-        <InputField
+        {/* <InputField
           label="Date of Birth"
           placeholder="DD-MM-YYYY"
           value={dob}
           onChangeText={setDob}
           required
-        />
+        /> */}
+        <InputFieldCalendar
+         label="Date of Birth"
+         value={dob}
+         onChange={setDob}
+         />
+        
 
         <InputField
           label="Registration Number"
@@ -272,12 +280,17 @@ const PersonalDetails = () => {
             </View>
           </View>
           <View className="flex-1 mx-1">
-            <InputField
+            {/* <InputField
               label="Admission Date"
               placeholder="DD-MM-YYYY"
               value={admissionDate}
               onChangeText={setAdmissionDate}
-            />
+            /> */}
+            <InputFieldCalendar
+             label="Admission Date"
+             value={admissionDate}
+             onChange={setAdmissionDate}
+             />
           </View>
         </View>
 
@@ -305,6 +318,5 @@ const PersonalDetails = () => {
       </ScrollView>
     </View>
   );
-};
-
+};  
 export default PersonalDetails;

@@ -1,4 +1,4 @@
-// components/Checkbox.tsx
+
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import CheckBox from "expo-checkbox";
