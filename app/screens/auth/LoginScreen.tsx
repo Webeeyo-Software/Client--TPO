@@ -8,6 +8,7 @@ import {
   FlatList,
   Pressable,
 } from 'react-native';
+import LottieView from 'lottie-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
@@ -211,9 +212,14 @@ const LoginScreen = () => {
       </Modal>
 
       <Modal transparent visible={loading}>
-        <View className="flex-1 items-center justify-center bg-black/40">
-          <ActivityIndicator size="large" color="#1877F2" />
-          <Text style={{ marginTop: 12, color: 'white', fontSize: 16 }}>Logging in...</Text>
+        <View className="flex-1 items-center justify-center bg-white/80">
+          <LottieView
+            source={require('../../../assets/images/loader.json')}
+            autoPlay
+            loop
+            style={{ width: 300, height: 300 }}
+          />
+          <Text style={{  color: 'white', fontSize: 16 }}>Logging in...</Text>
         </View>
       </Modal>
 
