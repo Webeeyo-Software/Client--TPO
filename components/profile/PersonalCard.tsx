@@ -9,7 +9,7 @@ interface PersonalCardProps {
 const PersonalCard: React.FC<PersonalCardProps> = ({ label, onPress}) => {
   return (
   
- <View className="flex-row items-center items-center justify-between px-4 border-b border-gray-200">
+ <View className="flex-row justify-between px-4 border-b border-gray-200">
     <TouchableOpacity
       className="flex-row items-center justify-between bg-white p-4 rounded-lg shadow-2xl w-full mt-4 "
       onPress={onPress}

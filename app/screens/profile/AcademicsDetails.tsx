@@ -14,30 +14,38 @@ export default function AcademicsScreen() {
   const [admissionDiploma, setAdmissionDiploma] = useState(false);
 
   return (
-     <View className="flex-1 bg-white">
+     <View className="flex-1 bg-white px-4 pt-12">
       <Header title="Academic Year" mode="normal" />
+              <InputRow />
+
     <ScrollView  showsVerticalScrollIndicator={ false} className=" p-4 bg-white">
-        <InputRow />
 
       <Text className="mt-3">Please select your admission 12th / Diploma</Text>
       <View className="flex-row items-center space-x-0">
+        <View className="flex-row gap-14 mt-4">
+          <View>
         <CheckBox value={admission12th} onValueChange={setAdmission12th} />
         <Text>12th</Text>
+        </View>
+        <View>
         <CheckBox className="pl-2" value={admissionDiploma} onValueChange={setAdmissionDiploma} />
         <Text>Diploma</Text>
+        </View>
+        </View>
       </View>
-
-     <View className="flex-row justify-between my-1 mt-4">
+    <View className="mt-4">
+     <View className="flex-row justify-between ">
         <Text>Is Direct Second Year admission?</Text>
         <Switch value={isDirectSecondYear} onValueChange={setIsDirectSecondYear} />
       </View>
-      <View className="flex-row justify-between my-0">
+      <View className="flex-row justify-between ">
         <Text>Are you going for higher studies?</Text>
         <Switch value={isHigherStudies} onValueChange={setIsHigherStudies} />
       </View>
-      <View className="flex-row justify-between my-1">
+      <View className="flex-row justify-between">
         <Text>Are you Interested only in Internship?</Text>
         <Switch value={isInternshipOnly} onValueChange={setIsInternshipOnly} />
+      </View>
       </View>
   
         <ProgressCard
@@ -66,8 +74,9 @@ export default function AcademicsScreen() {
       />
       
 
-    <PrimaryButton label="Freeze" onPress={() => {}} />
     </ScrollView>
+        <PrimaryButton label="Freeze" onPress={() => {}} />
+
     </View>
   );
 }

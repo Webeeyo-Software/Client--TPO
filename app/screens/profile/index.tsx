@@ -10,7 +10,7 @@ import { useRouter } from 'expo-router';
 const ProfileScreen = () => {
   const router = useRouter();
   return(
-    <View className="flex-1 bg-white ">
+    <View className="flex-1 bg-white px-4 pt-12">
       <Header title="Profile" />
       <ProfileCard/>
       <ScrollView className="">
@@ -19,7 +19,7 @@ const ProfileScreen = () => {
       <DetailsCard label="Examination Details" onPress={() => router.push('screens/profile/ExaminationDetails')} />
       <DetailsCard label="Academics" onPress={() => router.push('screens/profile/AcademicsDetails')} />
       <DetailsCard label="Offer Letter" onPress={() => router.push('screens/profile/OfferLetter')} />
-      <DetailsCard label="Upload CV" onPress={() => router.push('screens/profile/UploadCV')} />
+      <DetailsCard label="Upload CV" onPress={() => router.push('screens/profile/UploadCVS')} />
       <PrimaryButton label="Save Changes" onPress={() => {}}  />
       
       </ScrollView>

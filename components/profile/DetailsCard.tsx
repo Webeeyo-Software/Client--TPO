@@ -10,15 +10,15 @@ interface DetailCardProps {
 const DetailsCard: React.FC<DetailCardProps> = ({ label, onPress}) => {
   return (
   
- <View className="flex-row items-center items-center justify-between px-4 border-b border-gray-200">
+ <View className="flex-row items-center justify-between px-4">
     <TouchableOpacity
-      className="flex-row items-center justify-between bg-white p-4 rounded-lg shadow-2xl w-full mt-4 "
+      className="w-full mt-3 flex-row items-center justify-between rounded-xl border border-gray-200 bg-gray-50 p-4"
       onPress={onPress}
     >
     <Text className="text-lg font-semibold text-gray-800">{label}</Text>
       <Image
         source={require("../../assets/images/editing.png")}
-        className="w-8 h-8 ml-2"
+        className="w-6 h-6 ml-2"
         resizeMode="contain"
       />
      

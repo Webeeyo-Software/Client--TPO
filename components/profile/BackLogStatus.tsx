@@ -9,9 +9,9 @@ import { View, Text, TextInput } from "react-native";
   
 
   return (
-    <View className="px-4 ">
+    <View className="mx-5 ">
       {/* Dead Backlogs */}
-      <View className="flex-row items-center mt-2">
+      <View className="flex-row items-center">
         <Text className="text-base font-medium">No of dead Backlogs: </Text>
         <TextInput
           value={dead}

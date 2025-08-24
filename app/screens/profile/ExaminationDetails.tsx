@@ -10,9 +10,9 @@ const ExaminationDetails = () => {
   
   
   return (
-    <View className="px-2">
-    <View className="px-4 mt-2 mb-0 ">
+    <View className="flex-1 bg-white px-4 pt-12">
       <Header title="Examination Details" />
+      <View className="mx-4 mt-4">
        <InputField
         label="Current Degree Latest CGPA/CPI"
         placeholder="Enter your CGPA/CPI"
@@ -22,10 +22,8 @@ const ExaminationDetails = () => {
         className=""
        />
        </View>
-       <View className="mt-0">
         <BackLogStatus />
-        </View>
-      <ScrollView className="mt-4" 
+      <ScrollView 
       showsVerticalScrollIndicator={false}
       showsHorizontalScrollIndicator={false}
       >
