@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import InputField from "components/ui/InputField";
 import { View,Text, ScrollView } from "react-native";
 import ResultCard from "components/profile/ResultCard";
-import BacklogStatus from "components/profile/BackLogStatus";
+import BackLogStatus from "components/profile/BackLogStatus";
 
 const ExaminationDetails = () => {
   const [Degree, setDegree] = useState("");
@@ -23,7 +23,7 @@ const ExaminationDetails = () => {
        />
        </View>
        <View className="mt-0">
-        <BacklogStatus />
+        <BackLogStatus />
         </View>
       <ScrollView className="mt-4" 
       showsVerticalScrollIndicator={false}
