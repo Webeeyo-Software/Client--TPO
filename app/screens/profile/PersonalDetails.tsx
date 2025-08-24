@@ -70,7 +70,7 @@ const PersonalDetails: React.FC = () => {
   };
 
   return (
-    <View className="flex-1 bg-white p-5">
+    <View className="flex-1 bg-white p-5 mt-10">
       <Header title="Personal details" />
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Full Name */}

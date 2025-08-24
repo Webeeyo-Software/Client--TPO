@@ -14,12 +14,12 @@ const ProfileScreen = () => {
       <Header title="Profile" />
       <ProfileCard/>
       <ScrollView className="">
-      <DetailsCard label="Personal Details" onPress={() => router.push('../profile/PersonalDetails')}  />
-      <DetailsCard label="Address Details" onPress={() => router.push('../profile/AddressDetails.tsx')} />
-      <DetailsCard label="Examination Details" onPress={() => router.push('../profile/ExaminationDetails.tsx')} />
-      <DetailsCard label="Academics" onPress={() => router.push('../profile/Academics.tsx')} />
-      <DetailsCard label="Offer Letter" onPress={() => router.push('../profile/OfferLetter.tsx')} />
-      <DetailsCard label="Upload CV" onPress={() => router.push('../profile/UploadCV.tsx')} />
+      <DetailsCard label="Personal Details" onPress={() => router.push('/app/screens/profile/PersonalDetails.tsx')}  />
+      <DetailsCard label="Address Details" onPress={() => router.push('/app/screens/profile/AddressDetails.tsx')} />
+      <DetailsCard label="Examination Details" onPress={() => router.push('/app/screens/profile/ExaminationDetails.tsx')} />
+      <DetailsCard label="Academics" onPress={() => router.push('/app/screens/profile/Academics.tsx')} />
+      <DetailsCard label="Offer Letter" onPress={() => router.push('/app/screens/profile/OfferLetter.tsx')} />
+      <DetailsCard label="Upload CV" onPress={() => router.push('/app/screens/profile/UploadCV.tsx')} />
       <PrimaryButton label="Save Changes" onPress={() => {}}  />
       
       </ScrollView>

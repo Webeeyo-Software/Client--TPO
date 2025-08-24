@@ -17,6 +17,7 @@
     "axios": "^1.11.0",
     "expo": "^53.0.20",
     "expo-checkbox": "^4.1.4",
+    "expo-document-picker": "^13.1.6",
     "expo-router": "^5.1.4",
     "expo-status-bar": "~2.2.3",
     "lucide-react-native": "^0.539.0",
