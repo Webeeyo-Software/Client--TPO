@@ -1,12 +1,11 @@
-import { View, Text } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React from "react";
+import { ThemeProvider } from "../../../context/ThemeContext";
+import ThemeScreen from "../../screens/theme/ThemeScreen"; // just for demo
 
-export default function theme() {
+export default function App() {
   return (
-      <SafeAreaView>
-        <View className='items-center justify-center bg-[#1877F2] py-60 m-11 rounded-lg mt-60'>
-          <Text text-xl>Theme</Text>
-        </View>
-      </SafeAreaView>
+    <ThemeProvider>
+      <ThemeScreen />
+    </ThemeProvider>
   );
 }
