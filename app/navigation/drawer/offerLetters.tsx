@@ -1,12 +1,30 @@
-import { View, Text } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useState, useCallback } from "react";
+import { View, ScrollView  } from "react-native";
+import CandidateInfo from "../../../components/offerLetter/CandidateInfo";
+import CompanyInfo from "../../../components/offerLetter/CompanyInfo";
+import OfferDetails from "../../../components/offerLetter/OfferDetails";
 
-export default function offerLetters() {
+import Documents from "../../../components/offerLetter/Documents";
+import ActionButtons from "../../../components/offerLetter/ActionButtons";
+import StatusBadge from "../../../components/offerLetter/StatusBadge";
+
+const OfferLetterScreen: React.FC = () => {
+  const [status, setStatus] = useState<"pending" | "accepted" | "rejected">("pending");
+
+  const handleAccept = useCallback(() => setStatus("accepted"), []);
+  const handleReject = useCallback(() => setStatus("rejected"), []);
+
   return (
-      <SafeAreaView>
-        <View className='items-center justify-center bg-[#1877F2] py-60 m-11 rounded-lg mt-60'>
-          <Text text-xl>Offer Letters</Text>
-        </View>
-      </SafeAreaView>
+    <ScrollView className="flex-1 bg-[#f8f9fa] px-4 pt-10">
+      <CandidateInfo />
+      <CompanyInfo />
+      <OfferDetails />
+      <Documents />
+      <ActionButtons onAccept={handleAccept} onReject={handleReject} />
+      <StatusBadge status={status} />
+    </ScrollView>
+
   );
-}
+};
+
+export default OfferLetterScreen;
