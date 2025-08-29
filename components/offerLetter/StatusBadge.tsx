@@ -1,4 +1,4 @@
-// components/StatusBadge.tsx
+
 import { Text } from "react-native";
 
 interface Props {

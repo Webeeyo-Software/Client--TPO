@@ -1,4 +1,4 @@
-// components/CandidateInfo.tsx
+
 import { Text } from "react-native";
 import InfoCard from "./InfoCard";
 

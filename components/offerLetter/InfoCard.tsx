@@ -1,4 +1,4 @@
-// components/InfoCard.tsx
+
 import { View, Text } from "react-native";
 
 interface InfoCardProps {
