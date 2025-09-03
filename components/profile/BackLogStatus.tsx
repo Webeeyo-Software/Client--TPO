@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TextInput } from "react-native";
 
 
- function BacklogStatus() {
+export default function BacklogStatus() {
   const [dead, setDead] = useState("");
   const [active, setActive] = useState("");
 
@@ -36,4 +36,3 @@ import { View, Text, TextInput } from "react-native";
     </View>
   );
 }
-export default BacklogStatus;

@@ -1,73 +1,188 @@
-import React, { useState } from "react";
-import { View, ScrollView } from "react-native";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { View, ScrollView, Alert } from "react-native";
 import InputField from "components/ui/InputField";
 import PrimaryButton from "components/ui/PrimaryButton";
 import Header from "components/ui/Header";
 import Dropdown from "components/profile/DropDown";
-import {useFetchOptions} from "hooks/UsefetchOption";
+import { useFetchOptions } from "hooks/UsefetchOption";
+import api from "utils/authApi";
 
 type PersonalDetailsProps = {
   fullName: string;
   bloodGroup: string;
-  nationality: string;
-  religion: string;
-  category: string;
+  nationalityName: string;
+  religionName: string;
+  categoryName: string;
   year: string;
   email: string;
   dob: string;
-  registrationNumber: string;
+  registrationNo: string;
   aadharNumber: string;
-  contact: string;
+  mobile: string;
   admissionDate: string;
   guardianName: string;
   guardianContact: string;
-  department: string;
+  departmentName: string;
 };
-
-const BASE_URL = "http://192.168.1.30:3000";
 
 const PersonalDetails: React.FC = () => {
   // Fetch dropdown options
-  const { options: religions } = useFetchOptions(`${BASE_URL}/api/profile/religions`);
-  const { options: departments } = useFetchOptions(`${BASE_URL}/api/profile/departments`);
-  const { options: categories } = useFetchOptions(`${BASE_URL}/api/profile/categories`);
-  const { options: bloodGroups } = useFetchOptions(`${BASE_URL}/api/profile/bloodgroups`);
-  const { options: nationalities } = useFetchOptions(`${BASE_URL}/api/profile/nationalities`);
+  const { options: religions } = useFetchOptions(
+    "/api/profile/religions",
+    "religionName",
+    "id"
+  );
+
+  const { options: departments } = useFetchOptions(
+    "/api/profile/departments",
+    "deptName",
+    "id"
+  );
+
+  const { options: categories } = useFetchOptions(
+    "/api/profile/categories",
+    "categoryName",
+    "id"
+  );
+
+  const { options: bloodGroups } = useFetchOptions(
+    "/api/profile/bloodgroups",
+    "bloodGroup",
+    "id"
+  );
+
+  const { options: nationalities } = useFetchOptions(
+    "/api/profile/nationalities",
+    "nationalityName",
+    "id"
+  );
 
   // Form data state
-  const [formData, setFormData] = useState<PersonalDetailsProps>({
+  const [loading, setLoading] = useState<boolean>(false);
+  const [PersonalDetails, setPersonalDetails] = useState<PersonalDetailsProps>({
     fullName: "",
     bloodGroup: "",
-    nationality: "",
-    religion: "",
-    category: "",
+    nationalityName: "",
+    religionName: "",
+    categoryName: "",
     year: "",
     email: "",
     dob: "",
-    registrationNumber: "",
+    registrationNo: "",
     aadharNumber: "",
-    contact: "",
+    mobile: "",
     admissionDate: "",
     guardianName: "",
     guardianContact: "",
-    department: "",
+    departmentName: "",
   });
 
-  // Update handler
-  const handleChange = (key: keyof PersonalDetailsProps, value: string) => {
-    setFormData((prev) => ({ ...prev, [key]: value }));
+  const registrationNo = "122101";
+
+  const handleChange = (
+    field: keyof PersonalDetailsProps,
+    value: string | boolean
+  ) => {
+    setPersonalDetails((prev) => ({ ...prev, [field]: value }));
   };
 
-  // Submit handler
-  const handleSubmit = async () => {
+  // ✅ Fetch details and combine fname, mname, lname
+  const fetchPersonalDetails = async () => {
+    setLoading(true);
     try {
-      const response = await axios.post(`${BASE_URL}/api/profile/personal-details`, formData);
-      console.log("Form submitted successfully:", response.data);
+      const { data } = await api.get<any>(
+        `/api/PersonalDetails/${registrationNo}`
+      );
+
+      if (data) {
+        const fullName = [data.fname, data.mname, data.lname]
+          .filter(Boolean)
+          .join(" ");
+
+        setPersonalDetails({
+          fullName: fullName || "",
+          bloodGroup: data.bloodGroup || "",
+          nationalityName: data.nationalityName || "",
+          religionName: data.religionName || "",
+          categoryName: data.categoryName || "",
+          year: data.year || "",
+          email: data.email || "",
+          dob: data.dob || "",
+          registrationNo: data.registrationNo || "",
+          aadharNumber: data.aadharNumber || "",
+          mobile: data.mobile || "",
+          admissionDate: data.admissionDate || "",
+          guardianName: data.guardianName || "",
+          guardianContact: data.guardianContact || "",
+          departmentName: data.departmentName || "",
+        });
+      } else {
+        Alert.alert("Info", "No personal details found");
+      }
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error("Error fetching personal details:", error);
+      Alert.alert("Error", "Failed to fetch Personal Details.");
+    } finally {
+      setLoading(false);
     }
   };
+
+  // ✅ Save details and split fullName into fname, mname, lname
+  const savePersonalDetails = async () => {
+    setLoading(true);
+    try {
+      // Split full name back
+      const nameParts = PersonalDetails.fullName.trim().split(" ");
+      const fname = nameParts[0] || "";
+      const mname = nameParts.length === 3 ? nameParts[1] : "";
+      const lname =
+        nameParts.length === 3
+          ? nameParts[2]
+          : nameParts.length === 2
+          ? nameParts[1]
+          : "";
+
+      const payload = {
+        fname,
+        mname,
+        lname,
+        bloodGroup: PersonalDetails.bloodGroup,
+        nationality: PersonalDetails.nationalityName,
+        religion: PersonalDetails.religionName,
+        category: PersonalDetails.categoryName,
+        year: PersonalDetails.year,
+        email: PersonalDetails.email,
+        dob: PersonalDetails.dob,
+        registrationNo: PersonalDetails.registrationNo,
+        aadharNumber: PersonalDetails.aadharNumber,
+        mobile: PersonalDetails.mobile,
+        admissionDate: PersonalDetails.admissionDate,
+        guardianName: PersonalDetails.guardianName,
+        guardianContact: PersonalDetails.guardianContact,
+        departmentName: PersonalDetails.departmentName,
+      };
+
+      const { data } = await api.put(
+        `/api/profile/personal-details/${registrationNo}`,
+        payload
+      );
+
+      if (data && data.message) {
+        Alert.alert("Success", data.message);
+      } else {
+        Alert.alert("Error", "Failed to save Personal Details.");
+      }
+    } catch (error) {
+      console.error("Error saving personal details:", error);
+      Alert.alert("Error", "Failed to save Personal Details.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPersonalDetails();
+  }, []);
 
   return (
     <View className="flex-1 bg-white px-4 pt-12">
@@ -77,7 +192,7 @@ const PersonalDetails: React.FC = () => {
         <InputField
           label="Full Name"
           placeholder="Enter your name"
-          value={formData.fullName}
+          value={PersonalDetails.fullName}
           onChangeText={(val) => handleChange("fullName", val)}
           required
         />
@@ -86,7 +201,7 @@ const PersonalDetails: React.FC = () => {
         <InputField
           label="Email Address"
           placeholder="Enter your email"
-          value={formData.email}
+          value={PersonalDetails.email}
           onChangeText={(val) => handleChange("email", val)}
           required
         />
@@ -95,7 +210,7 @@ const PersonalDetails: React.FC = () => {
         <InputField
           label="Date of Birth"
           placeholder="DD-MM-YYYY"
-          value={formData.dob}
+          value={PersonalDetails.dob}
           onChangeText={(val) => handleChange("dob", val)}
           required
         />
@@ -104,8 +219,8 @@ const PersonalDetails: React.FC = () => {
         <InputField
           label="Registration Number"
           placeholder="Enter your registration number"
-          value={formData.registrationNumber}
-          onChangeText={(val) => handleChange("registrationNumber", val)}
+          value={PersonalDetails.registrationNo}
+          onChangeText={(val) => handleChange("registrationNo", val)}
           required
         />
 
@@ -115,7 +230,7 @@ const PersonalDetails: React.FC = () => {
             <InputField
               label="Aadhar Number"
               placeholder="Enter Aadhar"
-              value={formData.aadharNumber}
+              value={PersonalDetails.aadharNumber}
               onChangeText={(val) => handleChange("aadharNumber", val)}
               keyboardType="numeric"
               required
@@ -123,10 +238,10 @@ const PersonalDetails: React.FC = () => {
           </View>
           <View className="flex-1 mx-1">
             <InputField
-              label="Contact Number"
+              label="Mobile Number"
               placeholder="+91 XXXXX XXXXX"
-              value={formData.contact}
-              onChangeText={(val) => handleChange("contact", val)}
+              value={PersonalDetails.mobile}
+              onChangeText={(val) => handleChange("mobile", val)}
               keyboardType="phone-pad"
               required
             />
@@ -136,8 +251,8 @@ const PersonalDetails: React.FC = () => {
         {/* Department */}
         <Dropdown
           label="Department"
-          value={formData.department}
-          onValueChange={(val) => handleChange("department", val)}
+          value={PersonalDetails.departmentName}
+          onValueChange={(val) => handleChange("departmentName", val)}
           items={departments}
         />
 
@@ -146,7 +261,7 @@ const PersonalDetails: React.FC = () => {
           <View className="flex-1 mx-1">
             <Dropdown
               label="Blood Group"
-              value={formData.bloodGroup}
+              value={PersonalDetails.bloodGroup}
               onValueChange={(val) => handleChange("bloodGroup", val)}
               items={bloodGroups}
             />
@@ -154,8 +269,8 @@ const PersonalDetails: React.FC = () => {
           <View className="flex-1 mx-1">
             <Dropdown
               label="Nationality"
-              value={formData.nationality}
-              onValueChange={(val) => handleChange("nationality", val)}
+              value={PersonalDetails.nationalityName}
+              onValueChange={(val) => handleChange("nationalityName", val)}
               items={nationalities}
             />
           </View>
@@ -164,16 +279,16 @@ const PersonalDetails: React.FC = () => {
         {/* Religion */}
         <Dropdown
           label="Religion"
-          value={formData.religion}
-          onValueChange={(val) => handleChange("religion", val)}
+          value={PersonalDetails.religionName}
+          onValueChange={(val) => handleChange("religionName", val)}
           items={religions}
         />
 
         {/* Category */}
         <Dropdown
           label="Category"
-          value={formData.category}
-          onValueChange={(val) => handleChange("category", val)}
+          value={PersonalDetails.categoryName}
+          onValueChange={(val) => handleChange("categoryName", val)}
           items={categories}
         />
 
@@ -182,13 +297,13 @@ const PersonalDetails: React.FC = () => {
           <View className="flex-1 mx-1">
             <Dropdown
               label="Year"
-              value={formData.year}
+              value={PersonalDetails.year}
               onValueChange={(val) => handleChange("year", val)}
               items={[
-                { label: "FY", value: "FY" },
-                { label: "SY", value: "SY" },
-                { label: "TY", value: "TY" },
-                { label: "Final", value: "Final" },
+                { label: "FE", value: "FE" },
+                { label: "SE", value: "SE" },
+                { label: "TE", value: "TE" },
+                { label: "BE", value: "BE" },
               ]}
             />
           </View>
@@ -196,7 +311,7 @@ const PersonalDetails: React.FC = () => {
             <InputField
               label="Admission Date"
               placeholder="DD-MM-YYYY"
-              value={formData.admissionDate}
+              value={PersonalDetails.admissionDate}
               onChangeText={(val) => handleChange("admissionDate", val)}
               required
             />
@@ -207,7 +322,7 @@ const PersonalDetails: React.FC = () => {
         <InputField
           label="Guardian Name"
           placeholder="Enter Guardian name"
-          value={formData.guardianName}
+          value={PersonalDetails.guardianName}
           onChangeText={(val) => handleChange("guardianName", val)}
           required
         />
@@ -216,15 +331,15 @@ const PersonalDetails: React.FC = () => {
         <InputField
           label="Guardian Contact Number"
           placeholder="Enter guardian's contact number"
-          value={formData.guardianContact}
+          value={PersonalDetails.guardianContact}
           onChangeText={(val) => handleChange("guardianContact", val)}
           keyboardType="phone-pad"
           required
-        />        
+        />
       </ScrollView>
       <View className="mb-10">
-          <PrimaryButton label="Save" onPress={handleSubmit} />
-        </View>
+        <PrimaryButton label="Save" onPress={savePersonalDetails} />
+      </View>
     </View>
   );
 };
