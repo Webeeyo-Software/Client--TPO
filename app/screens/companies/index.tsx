@@ -1,13 +1,12 @@
-import  { useState, useRef, useEffect, useMemo } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { FlatListProps } from 'react-native';
-
+import LottieView from 'lottie-react-native';
 import {
   View,
   TextInput,
   Animated,
   FlatList,
   Text,
-  ActivityIndicator,
   ListRenderItemInfo,
 } from 'react-native';
 import { CompanyCard } from '../../../components/applications/Drives/CompanyCard';
@@ -16,8 +15,7 @@ import Feather from '@expo/vector-icons/Feather';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Header from 'components/ui/Header';
 import { useRouter } from 'expo-router';
-import api from 'utils/authApi'; 
-
+import api from 'utils/authApi';
 
 type Company = {
   id: string;
@@ -37,8 +35,9 @@ type ApiResponse = {
   };
 };
 
-const AnimatedFlatList = Animated.createAnimatedComponent(FlatList) as React.ComponentType<FlatListProps<Company>>;
-
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList) as React.ComponentType<
+  FlatListProps<Company>
+>;
 
 export default function DrivesScreen() {
   const [page, setPage] = useState<number>(1);
@@ -86,6 +85,7 @@ export default function DrivesScreen() {
     }
   };
 
+  // Debounced search
   useEffect(() => {
     const timeout = setTimeout(() => {
       setPage(1);
@@ -119,32 +119,21 @@ export default function DrivesScreen() {
   }, [searchOpacity, searchTranslateY]);
 
   return (
-    <View style={{ flex: 1, backgroundColor: 'white', paddingHorizontal: 16, paddingTop: 48 }}>
+    <View className="flex-1 bg-white px-4 pt-12">
       <Header title="Companies" mode="normal" />
 
+      {/* Search bar with animation */}
       <Animated.View
         style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginHorizontal: 4,
-          marginVertical: 16,
-          borderRadius: 12,
-          backgroundColor: '#F3F4F6',
-          paddingHorizontal: 12,
-          paddingVertical: 8,
           opacity: searchOpacity,
           transform: [{ translateY: searchTranslateY }],
         }}
+        className="flex-row items-center mx-1 my-4 rounded-xl bg-gray-100 px-3 py-2"
       >
         <Feather name="search" size={20} color="black" />
         <TextInput
           placeholder="Search companies"
-          style={{
-            flex: 1,
-            fontSize: 16,
-            color: '#374151',
-            marginLeft: 8,
-          }}
+          className="flex-1 text-base text-gray-700 ml-2"
           placeholderTextColor="#9CA3AF"
           value={search}
           onChangeText={setSearch}
@@ -161,9 +150,15 @@ export default function DrivesScreen() {
         />
       </Animated.View>
 
+      {/* Loader */}
       {loading ? (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <ActivityIndicator size="large" color="#3B82F6" />
+        <View className="flex-1 items-center justify-center">
+          <LottieView
+            source={require('../../../assets/images/loader.json')}
+            autoPlay
+            loop
+            style={{ width: 250, height: 250 }}
+          />
         </View>
       ) : (
         <AnimatedFlatList
@@ -199,15 +194,13 @@ export default function DrivesScreen() {
           )}
           scrollEventThrottle={16}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingBottom: 44,
-            paddingTop: 8,
-            gap: 8,
-          }}
+          contentContainerStyle={{ paddingBottom: 44, paddingTop: 8 }}
           ListEmptyComponent={
-            <View style={{ marginTop: 80, alignItems: 'center' }}>
-              <Text>No companies found.</Text>
-            </View>
+            !loading && (
+              <View className="mt-20 items-center">
+                <Text className="text-gray-600">No companies found.</Text>
+              </View>
+            )
           }
         />
       )}

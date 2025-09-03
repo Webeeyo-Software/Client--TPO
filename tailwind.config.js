@@ -7,7 +7,12 @@ module.exports = {
   ],
   presets: [require("nativewind/preset")],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ["Inter_400Regular", "sans-serif"], // fallback for NativeWind font-sans
+        bold: ["Inter_700Bold", "sans-serif"],   // custom key for bold variant
+      },
+    },
   },
   plugins: [],
 };

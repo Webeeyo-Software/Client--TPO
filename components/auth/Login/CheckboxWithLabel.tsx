@@ -26,7 +26,7 @@ const CheckboxWithLabel: React.FC<CheckboxWithLabelProps> = ({
       >
         {checked && <CheckIcon size={16} color="white" />}
       </View>
-      <Text className="text-sm text-gray-700">{label}</Text>
+      <Text className="text-sm text-gray-700 font-sans">{label}</Text>
     </TouchableOpacity>
   );
 };

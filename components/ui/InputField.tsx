@@ -67,7 +67,7 @@ const InputField: React.FC<InputFieldProps> = ({
     <View className="mb-4">
       {/* Render label only if provided */}
       {label ? (
-        <Text className="text-m text-gray-700 mb-1 font-semibold">
+        <Text className="text-m text-gray-700 mb-1 font-bold">
           {label}
           {required && <Text className="text-red-600"></Text>}
         </Text>

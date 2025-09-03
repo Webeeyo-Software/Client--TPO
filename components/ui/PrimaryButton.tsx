@@ -13,7 +13,7 @@ const PrimaryButton: React.FC<Props> = ({ label, onPress }) => {
       className="bg-blue-500 rounded-lg px-3 py-3 items-center justify-center mb-4 mt-6 mx-4 shadow-2xl w-auto"
       onPress={onPress}
     >
-      <Text className="text-white text-center font-semibold text-base">
+      <Text className="text-white text-center font-bold text-base">
         {label}
       </Text>
     </TouchableOpacity>

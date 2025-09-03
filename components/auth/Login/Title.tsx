@@ -44,7 +44,7 @@ const Title: React.FC<TitleProps> = ({ title1, title2 }) => {
           opacity: fadeAnim,
           transform: [{ translateY }],
         }}
-        className="text-5xl font-bold text-[#1877F2] leading-tight"
+        className="text-5xl font-bold text-[#1877F2] mt-1 "
       >
         {title2}
       </Animated.Text>

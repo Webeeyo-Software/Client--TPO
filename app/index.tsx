@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { ActivityIndicator, Image, View, Dimensions, StyleSheet } from 'react-native';
+import { ActivityIndicator, Image, View, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 
@@ -11,7 +11,6 @@ const SplashScreen = () => {
     const checkLoginStatus = async () => {
       try {
         const token = await AsyncStorage.getItem('authToken');
-
         if (token && typeof token === 'string' && token.trim() !== '') {
           setTimeout(() => {
             router.replace('/navigation/drawer');
@@ -33,28 +32,16 @@ const SplashScreen = () => {
   }, [router]);
 
   return (
-    <View style={styles.container}>
+    <View className="flex-1 bg-white justify-center items-center px-5">
       <Image
         source={require('../assets/images/icon.png')}
-        style={[styles.image, { width: width * 0.5, height: width * 0.5 }]}
+        style={{ width: width * 0.7, height: width * 0.7 }}
+        className="mb-6"
         resizeMode="contain"
       />
-      <ActivityIndicator size="large" color="#000" />
+      <ActivityIndicator size="large" color="#1877F2" />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-  },
-  image: {
-    marginBottom: 24,
-  },
-});
 
 export default SplashScreen;

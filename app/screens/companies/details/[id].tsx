@@ -1,44 +1,57 @@
-import { useLocalSearchParams } from 'expo-router';
-import { View, Text, ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
-import { useEffect, useState } from 'react';
+import { router, useLocalSearchParams } from 'expo-router';
+import { useState, useEffect, ReactNode } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, Image, Linking, Alert } from 'react-native';
+import LottieView from 'lottie-react-native';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import Header from 'components/ui/Header';
-import { API_BASE_URL } from 'utils/api';
+import api from 'utils/authApi';
+import PrimaryButton from 'components/ui/PrimaryButton';
+import Divider from 'components/ui/Divider';
 
-type Company = {
-  id: string;
-  companyId: string;
-  position: string;
-  location: string;
-  eligibilityCriteria: string;
-  jobDescription: string;
-  minPack: number;
-  maxPack: number;
-  ctc: number;
-  driveDate: string;
-  applicationDeadline: string;
+/** -------------------
+ * Company Model
+ * ------------------- */
+export type Company = {
+  id?: string;
+  companyId?: string;
+  name: string;
+  description?: string;
+  website?: string;
+  email?: string;
+  contactNumber?: string;
+  logoUrl?: string;
+  location?: string;
 };
 
-export default function CompanyDetails() {
-  const { id } = useLocalSearchParams<{ id?: string }>();
+function useCompanyDetails(id?: string) {
   const [company, setCompany] = useState<Company | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!id) {
+      setError('No company ID provided');
+      setCompany(null);
+      return;
+    }
+
     const fetchCompany = async () => {
+      setLoading(true);
+      setError(null);
+
       try {
-        if (!id) throw new Error('No company ID provided');
-        const res = await fetch(`${API_BASE_URL}/api/companies/${id}`);
-        if (!res.ok) {
-          throw new Error(`API error: ${res.status}`);
+        const { data: json } = await api.get<{
+          success: boolean;
+          company?: Partial<Company>;
+        }>(`/api/companies/${id}`);
+
+        if (!json.success || !json.company) {
+          throw new Error('Company not found');
         }
-        const json = await res.json();
-        if (!json.success || !json.data) {
-          throw new Error('Invalid API response');
-        }
-        setCompany(json.data);
+
+        setCompany(json.company as Company);
       } catch (err: any) {
-        setError(err.message || 'Unknown error');
+        setError(err.message ?? 'Unknown error');
         setCompany(null);
       } finally {
         setLoading(false);
@@ -48,115 +61,170 @@ export default function CompanyDetails() {
     fetchCompany();
   }, [id]);
 
-  const formatDate = (isoDate: string) => {
-    const d = new Date(isoDate);
-    return d.toLocaleDateString(undefined, {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
-  };
+  return { company, loading, error };
+}
 
+/** -------------------
+ * Pluggable UI Props
+ * ------------------- */
+type CompanyDetailsProps = {
+  id?: string;
+  header?: ReactNode;
+  footer?: ReactNode;
+  renderLoading?: () => ReactNode;
+  renderError?: (error: string) => ReactNode;
+  renderCard?: (company: Company) => ReactNode; // Pluggable card UI
+};
+
+export default function CompanyDetails({
+  id: propId,
+  header,
+  footer,
+  renderLoading,
+  renderError,
+  renderCard,
+}: CompanyDetailsProps) {
+  const { id: paramId } = useLocalSearchParams<{ id?: string }>();
+  const finalId = propId ?? paramId;
+  const { company, loading, error } = useCompanyDetails(finalId);
+
+  // Default Loading
   if (loading) {
     return (
-      <View className="flex-1 items-center justify-center">
-        <ActivityIndicator size="large" color="#3B82F6" />
-      </View>
+      (renderLoading && renderLoading()) || (
+        <View className="flex-1 items-center justify-center bg-white">
+          <LottieView
+            source={require('../../../../assets/images/loader.json')}
+            autoPlay
+            loop
+            style={{ width: 180, height: 180 }}
+          />
+        </View>
+      )
     );
   }
 
+  // Default Error
   if (error) {
     return (
-      <View className="flex-1 items-center justify-center px-4">
-        <Text className="text-center text-red-600">{error}</Text>
-      </View>
+      (renderError && renderError(error)) || (
+        <View className="flex-1 items-center justify-center bg-white p-6">
+          <Text className="text-center text-lg font-semibold text-red-500">{error}</Text>
+        </View>
+      )
     );
   }
 
   if (!company) {
     return (
-      <View className="flex-1 items-center justify-center">
-        <Text>Company not found.</Text>
+      <View className="flex-1 items-center justify-center bg-white">
+        <Text className="text-lg font-medium text-gray-600">Company not found.</Text>
       </View>
     );
   }
 
+  const handleLinkPress = (url?: string) => {
+    if (!url) return;
+    Linking.openURL(url).catch(() => Alert.alert('Error', 'Unable to open link.'));
+  };
+
   return (
     <View className="flex-1 bg-white px-4 pt-12">
-      <Header title="Details" mode="normal" />
+      {header || <Header title="Company Details" mode="normal" />}
 
       <ScrollView
-        showsVerticalScrollIndicator={false}
-        className="px-4"
-        contentContainerStyle={{ paddingBottom: 100 }}>
-        <View className="mb-3 mt-6">
-          <Text className="mb-2 text-lg font-semibold">Company Attachments</Text>
-          <Text className="mb-1 text-blue-600 underline">Company Brochure</Text>
-          <Text className="text-blue-600 underline">Company Presentation</Text>
-        </View>
+        className="flex-1 px-2 pt-6"
+        contentContainerStyle={{ paddingBottom: 80 }}
+        showsVerticalScrollIndicator={false}>
+        {/* If pluggable card provided */}
+        {renderCard ? (
+          renderCard(company)
+        ) : (
+          <>
+            <View className="mb-6 items-center rounded-xl border border-gray-200 bg-gray-50 p-6 shadow-lg">
+              {company.logoUrl ? (
+                <Image
+                  source={{ uri: company.logoUrl }}
+                  className="mb-4 h-40 w-40 rounded-2xl"
+                  resizeMode="contain"
+                />
+              ) : (
+                <View className="mb-4 h-28 w-28 rounded-2xl bg-gray-200" />
+              )}
 
-        <View className="mb-6">
-          <Text className="mb-2 text-lg font-semibold">Instructions</Text>
-          <Text className="text-sm text-gray-700">
-            Please note Online Assessment is on {formatDate(company.driveDate)} and Interview Drive
-            on Friday, {formatDate(company.driveDate)}.
-          </Text>
-        </View>
+              <Text className="text-center text-2xl font-extrabold text-gray-900">
+                {company.name}
+              </Text>
 
-        <View className="mb-6">
-          <Text className="mb-2 text-lg font-semibold">Company Criteria</Text>
-          <View className="mt-1">
-            <Text>Position: {company.position}</Text>
-            <Text>Location: {company.location}</Text>
-            <Text>Eligibility: {company.eligibilityCriteria}</Text>
-          </View>
-        </View>
+              {company.location && (
+                <View className="mt-2 flex-row items-center">
+                  <Ionicons name="location-sharp" size={18} color="#4B5563" />
+                  <Text className="ml-1 text-sm text-gray-600">{company.location}</Text>
+                </View>
+              )}
+            </View>
 
-        <View className="mb-6">
-          <Text className="mb-2 text-lg font-semibold">Company Selection Procedure</Text>
-          <Text>Round 1: Online Test</Text>
-          <Text>Round 2: Technical Interview</Text>
-          <Text>Round 3: HR Interview</Text>
-        </View>
+            {/* Description */}
+            {company.description && (
+              <View className="mb-6 items-start rounded-xl border border-gray-200 bg-gray-50 p-6 shadow-lg">
+                <Text className="mb-3 text-lg font-semibold text-gray-800">About Us</Text>
+                <Text className="text-base leading-relaxed text-gray-700">
+                  {company.description}
+                </Text>
+              </View>
+            )}
 
-        <View className="mb-6">
-          <Text className="mb-2 text-lg font-semibold">
-            Questions answered by You while applying
-          </Text>
-          <View className="mb-2">
-            <Text className="font-medium">Why do you want to join this company?</Text>
-            <Text>I am passionate about technology and innovation.</Text>
-          </View>
-          <View className="mb-2">
-            <Text className="font-medium">What are your strengths and weaknesses?</Text>
-            <Text>I am a quick learner and a team player.</Text>
-          </View>
-          <View>
-            <Text className="font-medium">What are your career goals?</Text>
-            <Text>I want to grow as a software engineer.</Text>
-          </View>
-        </View>
+            {/* Contact Info */}
+            {(company.website || company.email || company.contactNumber) && (
+              <View className="mb-6 rounded-xl border border-gray-200 bg-gray-50 p-6 shadow-lg">
+                <Text className="mb-4 text-lg font-semibold text-gray-800">
+                  Contact Information
+                </Text>
 
-        <View className="mb-6">
-          <Text className="mb-2 text-lg font-semibold">Company Information And Criteria</Text>
-          <Text>Name: {company.position}</Text>
-          <Text>Industry: N/A</Text>
-          <Text>Location: {company.location}</Text>
-          <Text>
-            Salary: ₹{company.minPack.toLocaleString()} - ₹{company.maxPack.toLocaleString()}
-          </Text>
-          <Text>Job Role: {company.position}</Text>
-        </View>
+                {company.website && (
+                  <TouchableOpacity
+                    className="mb-3 flex-row items-center"
+                    onPress={() => handleLinkPress(company.website)}
+                    activeOpacity={0.7}>
+                    <MaterialIcons name="public" size={20} color="#2563EB" />
+                    <Text className="ml-2 text-base text-blue-600 underline">
+                      {company.website}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+
+                {company.email && (
+                  <TouchableOpacity
+                    className="mb-3 flex-row items-center"
+                    onPress={() => handleLinkPress(`mailto:${company.email}`)}
+                    activeOpacity={0.7}>
+                    <MaterialIcons name="email" size={20} color="#374151" />
+                    <Text className="ml-2 text-base text-gray-800">{company.email}</Text>
+                  </TouchableOpacity>
+                )}
+
+                {company.contactNumber && (
+                  <View className="flex-row items-center">
+                    <MaterialIcons name="phone" size={20} color="#374151" />
+                    <Text className="ml-2 text-base text-gray-800">{company.contactNumber}</Text>
+                  </View>
+                )}
+              </View>
+            )}
+          </>
+        )}
       </ScrollView>
-
-      <View className="absolute bottom-0 left-0 right-0 flex-row gap-3 border-t border-gray-200 bg-white p-4">
-        <TouchableOpacity className="flex-1 rounded-lg border border-gray-300 p-3">
-          <Text className="text-center font-medium text-gray-700">Cancel</Text>
-        </TouchableOpacity>
-        <TouchableOpacity className="flex-1 rounded-lg bg-blue-600 p-3">
-          <Text className="text-center font-medium text-white">Apply</Text>
-        </TouchableOpacity>
+      <Divider/>
+      <View className='m-5'>
+        <PrimaryButton
+          label="Check for Placements"
+          onPress={() => {
+            router.push('screens/notices');
+          }}
+        />
       </View>
+
+      {footer}
     </View>
   );
 }

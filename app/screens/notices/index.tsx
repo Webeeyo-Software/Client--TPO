@@ -1,4 +1,3 @@
-import React from 'react';
 import { View, FlatList, SafeAreaView, TouchableOpacity } from 'react-native';
 import Header from '../../../components/ui/Header';
 import NoticeCard from '../../../components/notices/NoticeCard';
