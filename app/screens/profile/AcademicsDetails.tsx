@@ -3,16 +3,17 @@ import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
-  TextInput,
   ScrollView,
   Switch,
-  TouchableOpacity,
+  Alert,
   ActivityIndicator,
 } from "react-native";
-import axios from "axios";
+import Header from "components/ui/Header";
+import api from "utils/authApi";
+import PrimaryButton from "components/ui/PrimaryButton";
+import InputField from "components/ui/InputField";
 
-interface AcademicDetails {
-  registrationNo: number;
+type AcademicDetailsProps = {
   highestQualification?: string;
 
   sscPercent?: number;
@@ -41,29 +42,112 @@ interface AcademicDetails {
   isDirectSecondYear?: boolean;
   isGoingForHigherStudies?: boolean;
   isInterestedOnlyInInternship?: boolean;
-}
+};
 
-const AcademicDetailsScreen: React.FC<{ registrationNo: number }> = ({
-  registrationNo,
-}) => {
-  const [data, setData] = useState<AcademicDetails | null>(null);
-  const [loading, setLoading] = useState(true);
+const AcademicDetailsScreen: React.FC = () => {
+  const [loading, setLoading] = useState<boolean>(false); // for fetch
+  const [saving, setSaving] = useState<boolean>(false); // for save
+  const [academicDetails, setAcademicDetails] = useState<AcademicDetailsProps>({
+    highestQualification: "",
+    sscPercent: 0,
+    sscBoard: "",
+    sscInstitute: "",
+    sscYear: 0,
+    hscPercent: 0,
+    hscBoard: "",
+    hscInstitute: "",
+    hscYear: 0,
+    diplomaPercent: 0,
+    diplomaBoard: "",
+    diplomaYear: 0,
+    diplomaInstitute: "",
+    graduationCPI: 0,
+    graduationPercent: 0,
+    graduationYear: 0,
+    graduationInstitute: "",
+    graduationUniversity: "",
+    postGraduationCPI: 0,
+    isDirectSecondYear: false,
+    isGoingForHigherStudies: false,
+    isInterestedOnlyInInternship: false,
+  });
+
+  // TODO: replace hardcoded value with context/props later
+  const registrationNo = "122102";
+
+  const handleChange = (field: keyof AcademicDetailsProps, value: string | number | boolean) => {
+    setAcademicDetails((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const fetchAcademicDetails = async () => {
+    setLoading(true);
+    try {
+      const response = await api.get(`/api/AcademicDetails/${registrationNo}`);
+      const details = response.data.data; // ✅ FIX: correct path
+      console.log("Fetched academic details:", details);
+      if (details) {
+        setAcademicDetails({
+          highestQualification: details.highestQualification || "",
+          sscPercent: details.sscPercent || 0,
+          sscBoard: details.sscBoard || "",
+          sscInstitute: details.sscInstitute || "",
+          sscYear: details.sscYear || 0,
+          hscPercent: details.hscPercent || 0,
+          hscBoard: details.hscBoard || "",
+          hscInstitute: details.hscInstitute || "",
+          hscYear: details.hscYear || 0,
+          diplomaPercent: details.diplomaPercent || 0,
+          diplomaBoard: details.diplomaBoard || "",
+          diplomaYear: details.diplomaYear || 0,
+          diplomaInstitute: details.diplomaInstitute || "",
+          graduationCPI: details.graduationCPI || 0,
+          graduationPercent: details.graduationPercent || 0,
+          graduationYear: details.graduationYear || 0,
+          graduationInstitute: details.graduationInstitute || "",
+          graduationUniversity: details.graduationUniversity || "",
+          postGraduationCPI: details.postGraduationCPI || 0,
+          isDirectSecondYear: details.isDirectSecondYear || false,
+          isGoingForHigherStudies: details.isGoingForHigherStudies || false,
+          isInterestedOnlyInInternship: details.isInterestedOnlyInInternship || false,
+        });
+      } else {
+        Alert.alert("No academic details found");
+      }
+    } catch (error) {
+      console.error("Error fetching academic details:", error);
+      Alert.alert("Error fetching academic details");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const saveAcademicDetails = async () => {
+    setSaving(true);
+    try {
+      const payload = { ...academicDetails };
+      const { data } = await api.put(
+        `/api/AcademicDetails/${registrationNo}`,
+        payload
+      );
+      if (data && data.message) {
+        Alert.alert("Academic details saved successfully", data.message);
+      } else {
+        Alert.alert("Failed to save academic details");
+      }
+    } catch (error) {
+      console.error("Error saving academic details:", error);
+      Alert.alert("Error saving academic details");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get(
-          `http://your-backend-url/api/students/${registrationNo}/academic-details`
-        );
-        setData(res.data);
-      } catch (err) {
-        console.error("Error fetching academic details:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [registrationNo]);
+    fetchAcademicDetails();
+  }, []);
 
   if (loading) {
     return (
@@ -73,7 +157,7 @@ const AcademicDetailsScreen: React.FC<{ registrationNo: number }> = ({
     );
   }
 
-  if (!data) {
+  if (!academicDetails) {
     return (
       <View className="flex-1 justify-center items-center">
         <Text>No academic details found</Text>
@@ -83,81 +167,132 @@ const AcademicDetailsScreen: React.FC<{ registrationNo: number }> = ({
 
   return (
     <ScrollView className="flex-1 bg-white p-4">
-      <Text className="text-xl font-bold mb-4">Academics</Text>
+      <Header title="Academic Details" />
 
-      {/* Highest Qualification */}
+      {/* Editable fields */}
       <View className="mb-3">
-        <Text className="text-sm">Highest Qualification</Text>
-        <TextInput
-          value={data.highestQualification || ""}
-          className="border border-gray-300 rounded-lg px-3 py-2"
-          editable={false}
+        <InputField
+          label="Highest Qualification"
+          value={academicDetails.highestQualification || ""}
+          onChangeText={(text) => handleChange("highestQualification", text)}
+        />
+        <InputField
+          label="SSC Percentage"
+          value={String(academicDetails.sscPercent ?? "")}
+          keyboardType="numeric"
+          onChangeText={(text) =>
+            handleChange("sscPercent", Number(text) || 0)
+          }
+        />
+        <InputField
+          label="HSC Percentage"
+          value={String(academicDetails.hscPercent ?? "")}
+          keyboardType="numeric"
+          onChangeText={(text) =>
+            handleChange("hscPercent", Number(text) || 0)
+          }
+        />
+        <InputField
+          label="Diploma Percentage"
+          value={String(academicDetails.diplomaPercent ?? "")}
+          keyboardType="numeric"
+          onChangeText={(text) =>
+            handleChange("diplomaPercent", Number(text) || 0)
+          }
+        />
+        <InputField
+          label="Graduation Latest CPI"
+          value={String(academicDetails.graduationCPI ?? "")}
+          keyboardType="numeric"
+          onChangeText={(text) =>
+            handleChange("graduationCPI", Number(text) || 0)
+          }
+        />
+        <InputField
+          label="Post Graduation CPI"
+          value={String(academicDetails.postGraduationCPI ?? "")}
+          keyboardType="numeric"
+          onChangeText={(text) =>
+            handleChange("postGraduationCPI", Number(text) || 0)
+          }
         />
       </View>
 
       {/* SSC */}
       <View className="bg-blue-100 rounded-2xl p-4 mb-4 shadow">
         <Text className="font-bold text-blue-600 mb-2">SSC</Text>
-        <Text>Board: {data.sscBoard}</Text>
-        <Text>Institute: {data.sscInstitute}</Text>
-        <Text>Percentage: {data.sscPercent}</Text>
-        <Text>Year: {data.sscYear}</Text>
+        <Text>Board: {academicDetails.sscBoard || "N/A"}</Text>
+        <Text>Institute: {academicDetails.sscInstitute || "N/A"}</Text>
+        <Text>Percentage: {academicDetails.sscPercent ?? "N/A"}</Text>
+        <Text>Year: {academicDetails.sscYear || "N/A"}</Text>
       </View>
 
       {/* HSC */}
       <View className="bg-blue-100 rounded-2xl p-4 mb-4 shadow">
         <Text className="font-bold text-blue-600 mb-2">HSC</Text>
-        <Text>Board: {data.hscBoard}</Text>
-        <Text>Institute: {data.hscInstitute}</Text>
-        <Text>Percentage: {data.hscPercent}</Text>
-        <Text>Year: {data.hscYear}</Text>
+        <Text>Board: {academicDetails.hscBoard || "N/A"}</Text>
+        <Text>Institute: {academicDetails.hscInstitute || "N/A"}</Text>
+        <Text>Percentage: {academicDetails.hscPercent ?? "N/A"}</Text>
+        <Text>Year: {academicDetails.hscYear || "N/A"}</Text>
       </View>
 
       {/* Diploma */}
       <View className="bg-blue-100 rounded-2xl p-4 mb-4 shadow">
         <Text className="font-bold text-blue-600 mb-2">Diploma</Text>
-        <Text>Board: {data.diplomaBoard}</Text>
-        <Text>Institute: {data.diplomaInstitute}</Text>
-        <Text>Percentage: {data.diplomaPercent}</Text>
-        <Text>Year: {data.diplomaYear}</Text>
+        <Text>Board: {academicDetails.diplomaBoard || "N/A"}</Text>
+        <Text>Institute: {academicDetails.diplomaInstitute || "N/A"}</Text>
+        <Text>Percentage: {academicDetails.diplomaPercent ?? "N/A"}</Text>
+        <Text>Year: {academicDetails.diplomaYear || "N/A"}</Text>
       </View>
 
       {/* Graduation */}
       <View className="bg-blue-100 rounded-2xl p-4 mb-4 shadow">
         <Text className="font-bold text-blue-600 mb-2">Graduation</Text>
-        <Text>University: {data.graduationUniversity}</Text>
-        <Text>Institute: {data.graduationInstitute}</Text>
-        <Text>CPI: {data.graduationCPI}</Text>
-        <Text>Percentage: {data.graduationPercent}</Text>
-        <Text>Year: {data.graduationYear}</Text>
+        <Text>University: {academicDetails.graduationUniversity || "N/A"}</Text>
+        <Text>Institute: {academicDetails.graduationInstitute || "N/A"}</Text>
+        <Text>CPI: {academicDetails.graduationCPI ?? "N/A"}</Text>
+        <Text>Percentage: {academicDetails.graduationPercent ?? "N/A"}</Text>
+        <Text>Year: {academicDetails.graduationYear || "N/A"}</Text>
       </View>
 
       {/* Post Graduation */}
       <View className="bg-blue-100 rounded-2xl p-4 mb-4 shadow">
         <Text className="font-bold text-blue-600 mb-2">Post Graduation</Text>
-        <Text>CPI: {data.postGraduationCPI}</Text>
+        <Text>CPI: {academicDetails.postGraduationCPI ?? "N/A"}</Text>
       </View>
 
       {/* Toggles */}
       <View className="mt-4 space-y-2">
         <View className="flex-row items-center justify-between">
           <Text>Direct Second Year?</Text>
-          <Switch value={data.isDirectSecondYear || false} />
+          <Switch
+            value={academicDetails.isDirectSecondYear || false}
+            onValueChange={(val) => handleChange("isDirectSecondYear", val)}
+          />
         </View>
         <View className="flex-row items-center justify-between">
           <Text>Going for Higher Studies?</Text>
-          <Switch value={data.isGoingForHigherStudies || false} />
+          <Switch
+            value={academicDetails.isGoingForHigherStudies || false}
+            onValueChange={(val) => handleChange("isGoingForHigherStudies", val)}
+          />
         </View>
         <View className="flex-row items-center justify-between">
           <Text>Interested only in Internship?</Text>
-          <Switch value={data.isInterestedOnlyInInternship || false} />
+          <Switch
+            value={academicDetails.isInterestedOnlyInInternship || false}
+            onValueChange={(val) =>
+              handleChange("isInterestedOnlyInInternship", val)
+            }
+          />
         </View>
       </View>
 
-      {/* Freeze Button */}
-      <TouchableOpacity className="mt-6 bg-blue-500 rounded-2xl py-3">
-        <Text className="text-white text-center font-bold">Freeze</Text>
-      </TouchableOpacity>
+      <PrimaryButton
+        label={saving ? "Saving..." : "Save"}
+        onPress={saveAcademicDetails}
+        
+      />
     </ScrollView>
   );
 };
